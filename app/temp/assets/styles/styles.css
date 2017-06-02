@@ -2,15 +2,16 @@ body {
 	display: -webkit-box;
 	display: -ms-flexbox;
 	display: flex;
-	-webkit-box-pack: start;
-	    -ms-flex-pack: start;
-	        justify-content: flex-start;
+	-webkit-box-pack: center;
+	    -ms-flex-pack: center;
+	        justify-content: center;
 	-webkit-box-align: center;
 	    -ms-flex-align: center;
 	        align-items: center;
 	font-family: 'roboto', arial, sans-serif;
 	font-size: 2rem;
 	font-weight: 100;
+	min-height: 100vh;
 }
 
 .calculator {
@@ -18,8 +19,9 @@ body {
 	display: grid;
 	-ms-grid-columns: 25% 25% 25% 25%;
 	    grid-template-columns: 25% 25% 25% 25%;
-	width: 600px;
-	height: 900px;
+	width: 500px;
+	height: 850px;
+	border-radius: 20px;
 box-shadow: 10px 10px 26px 10px rgba(0,0,0,0.75);
 }
 
