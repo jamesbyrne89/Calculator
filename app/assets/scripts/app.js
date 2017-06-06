@@ -1,14 +1,45 @@
 const input = document.getElementById('input');
-const inputArr = [];
-input.innerText = inputArr;
+const integers = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
+
 (function addClickEvents() {
 	const numbers = document.getElementsByClassName('button');
+	let handleInput = new InputHandler();
 	Array.prototype.forEach.call(numbers, (function(item) {
 		item.addEventListener('click', function() {
-			input.innerText += this.innerText;
+			
+			handleInput.getInput();
+			handleInput.updateInput(this.innerText);
+			handleInput.updateView();
 		})
 	}))
 })();
+
+
+
+function InputHandler() {
+
+	var inputArr = [];
+
+	this.getInput = function() {
+		return inputArr;
+	};
+
+	this.setInitialState = function() {
+		input.innerText = inputArr;
+	};
+
+	this.updateInput = function(add) {
+		inputArr.push(add);
+	};
+
+	this.updateView = function() {
+		input.innerText = inputArr.join('');
+	};
+};
+
+let init = new InputHandler();
+init.setInitialState();
+
 
 
 
@@ -32,17 +63,19 @@ document.getElementById('equals').addEventListener('click', function() {
 });
 
 function joinIntegers() {
+	if (integers.indexOf(input.innerText.slice(-1)) >= 0) {
 
+	}
 };
 
 var maths = {
-	add: function(x, y) {
-		return x + y;
-	},
-	subtract: function(x, y) {
-		return x - y;
-	}
+		add: function(x, y) {
+			return x + y;
+		},
+		subtract: function(x, y) {
+			return x - y;
+		}
 
-}
-alert(maths.add(1, 2));
+	}
+	//alert(maths.add(1, 2));
 	//console.log(typeof *)
