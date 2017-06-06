@@ -6,9 +6,9 @@ const integers = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
 	let handleInput = new InputHandler();
 	Array.prototype.forEach.call(numbers, (function(item) {
 		item.addEventListener('click', function() {
-			
 			handleInput.getInput();
 			handleInput.updateInput(this.innerText);
+			handleInput.joinIntegers()
 			handleInput.updateView();
 		})
 	}))
@@ -35,6 +35,11 @@ function InputHandler() {
 	this.updateView = function() {
 		input.innerText = inputArr.join('');
 	};
+	this.joinIntegers = function(){
+		if (integers.indexOf(inputArr[inputArr.length-1]) >= 0) {
+			console.log('number')
+		}
+	}
 };
 
 let init = new InputHandler();
