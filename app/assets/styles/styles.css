@@ -76,6 +76,7 @@ box-shadow: 10px 10px 26px 10px #DCE1E6;
 	color: #abb4bc;
 	display: block;
 	font-size: 1.5rem;
+	min-height: 28px;
 }
 
 .output {
