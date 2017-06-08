@@ -1,30 +1,44 @@
-
 const integers = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
 
-(function addClickEvents() {
+(function init() {
 	const numbers = document.getElementsByClassName('button');
 	const equalsBtn = document.getElementById('equals');
-	let handleInput = new InputHandler();
-	Array.prototype.forEach.call(numbers, (function(item) {
-		item.addEventListener('click', function() {
+
+	const _setInitialState = function _setInitialState() {
+		input.innerText = '';
+	};
+
+	const _listen = function _listen() {
+		let handleInput = new InputHandler();
+		Array.prototype.forEach.call(numbers, (function(item) {
+			item.addEventListener('click', function() {
+				handleInput.getInput();
+				handleInput.updateView(this.innerText);
+			})
+		}))
+
+		equalsBtn.addEventListener('click', function() {
+			let getTotal = new InputHandler();
+			getTotal.getInput();
+			getTotal.evaluate(input.innerText);
+		}, false)
+
+		const ac = document.getElementById('ac');
+
+		ac.addEventListener('click', function() {
+			input.innerText = '';
+			output.innerText = '';
+		});
+		const multiply = document.getElementById('multiply');
+
+		multiply.addEventListener('click', function() {
 			handleInput.getInput();
-			handleInput.updateView(this.innerText);
-		})
-	}))
-	
-	equalsBtn.addEventListener('click', function(){
-		let getTotal = new InputHandler();
-		getTotal.getInput();
-		console.log(input.innerText)
-		getTotal.evaluate(input.innerText);
-	}, false)
+			handleInput.updateView('*');
+		});		
+	}
 
-const ac = document.getElementById('ac');
-
-ac.addEventListener('click', function() {
-	input.innerText = '';
-	output.innerText = '';
-});
+	_setInitialState();
+	_listen();
 
 })();
 
@@ -32,23 +46,19 @@ ac.addEventListener('click', function() {
 
 function InputHandler() {
 
-const input = document.getElementById('input');
-const output = document.getElementById('output');
+	const input = document.getElementById('input');
+	const output = document.getElementById('output');
 
 	this.getInput = function() {
 		return input.innerText;
 	};
 
-	this.setInitialState = function() {
-		input.innerText = '';
-	};
 
 	this.updateView = function updateView(x) {
-		console.log(x)
 		input.innerText += x;
 	};
 
-	this.evaluate = function _evaluate(total){
+	this.evaluate = function _evaluate(total) {
 		console.log(total)
 		output.innerText = eval(total);
 		input.innerText = '';
@@ -63,7 +73,7 @@ init.setInitialState();
 
 const view = function view() {
 
-	
+
 
 }
 

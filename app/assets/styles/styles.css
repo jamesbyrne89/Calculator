@@ -69,7 +69,10 @@ box-shadow: 10px 10px 26px 10px #DCE1E6;
 	background-color: #4fcbcb;
 	color: #fff;
 	grid-column: 3/5;
-
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;	
 }
 
 .input {
@@ -82,4 +85,5 @@ box-shadow: 10px 10px 26px 10px #DCE1E6;
 
 .output {
 	font-size: 4.5rem;
+	min-height: 95px;
 }
