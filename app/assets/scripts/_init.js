@@ -7,7 +7,21 @@ function init() {
 
 	const _setInitialState = function _setInitialState() {
 		input.innerText = '';
-	};	
+	};
+
+	const attachKeyboardEvents = function _attachKeyboardEvents(){
+		document.body.addEventListener('keydown', function(e){
+
+			// 4
+			if (e.keycode = 100 || 52){
+				handleInput.getInput();
+				handleInput.updateView('4');
+			}
+		})
+			// Add event listeners
+		}
+	} 
+
 	const _listen = function _listen() {
 		let handleInput = new InputHandler();
 		Array.prototype.forEach.call(numbers, (function(item) {
