@@ -1,7 +1,7 @@
 const integers = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
 
 (function init() {
-	const numbers = document.getElementsByClassName('button');
+	const numbers = document.getElementsByClassName('btn__number');
 	const equalsBtn = document.getElementById('equals');
 
 	const _setInitialState = function _setInitialState() {
@@ -29,13 +29,21 @@ const integers = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
 			input.innerText = '';
 			output.innerText = '';
 		});
-		const multiply = document.getElementById('multiply');
 
-		multiply.addEventListener('click', function() {
-			handleInput.getInput();
-			handleInput.updateView('*');
-		});		
-	}
+		const operators = document.getElementsByClassName('operator');
+		Array.prototype.forEach.call(operators, (function(item) {
+			item.addEventListener('click', function() {
+				handleInput.getInput();
+				if (input.innerText.slice(-1) === this.innerText) {
+					return;
+				}
+				else {
+				handleInput.updateView(this.innerText);
+			}
+			})
+		}))
+	};
+
 
 	_setInitialState();
 	_listen();
@@ -60,22 +68,12 @@ function InputHandler() {
 
 	this.evaluate = function _evaluate(total) {
 		console.log(total)
-		output.innerText = eval(total);
-		input.innerText = '';
+		let parsedTotal = total.replace('X', '*');
+		output.innerText = eval(parsedTotal);
 	};
 
 };
 
-let init = new InputHandler();
-init.setInitialState();
-
-
-
-const view = function view() {
-
-
-
-}
 
 
 
