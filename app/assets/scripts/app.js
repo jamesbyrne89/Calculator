@@ -2,6 +2,7 @@
 	const numbers = document.getElementsByClassName('btn__number');
 	const equalsBtn = document.getElementById('equals');
 	const ac = document.getElementById('ac');
+	const percentage = document.getElementById('percentage');
 	const operators = document.getElementsByClassName('operator');
 
 	const _setInitialState = function _setInitialState() {
@@ -32,7 +33,6 @@
 			item.addEventListener('click', function() {
 				handleInput.getInput();
 				handleInput.checkDuplicates(this.innerText);
-
 				if (!handleInput.checkDuplicates(this.innerText)){
 				handleInput.updateView(this.innerText);
 			}
@@ -41,6 +41,12 @@
 			}
 			})
 		}))
+		percentage.addEventListener('click', function(){
+			let getPercentage = new InputHandler();
+			getPercentage.getInput();
+			getPercentage.evaluate(getPercentage.handlePercent(input.innerText));
+		});
+
 	};
 
 	_setInitialState();
@@ -55,7 +61,7 @@ function InputHandler() {
 	const input = document.getElementById('input');
 	const output = document.getElementById('output');
 
-	this.getInput = function() {
+	this.getInput = function _getInput() {
 		return input.innerText;
 	};
 
@@ -67,6 +73,12 @@ function InputHandler() {
 		else {
 			return true;
 		}
+	};
+
+	this.handlePercent = function _handlePercent(total) {
+		let percTotal = total + '/100';
+		console.log()
+		return percTotal;
 	};
 
 	this.updateView = function updateView(x) {
