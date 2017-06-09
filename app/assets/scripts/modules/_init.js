@@ -1,4 +1,4 @@
-(function init() {
+function init() {
 	const numbers = document.getElementsByClassName('btn__number');
 	const equalsBtn = document.getElementById('equals');
 	const ac = document.getElementById('ac');
@@ -51,4 +51,6 @@
 	_setInitialState();
 	_listen();
 
-})();
+};
+
+module.exports = init;

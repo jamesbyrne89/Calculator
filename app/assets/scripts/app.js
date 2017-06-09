@@ -1,5 +1,5 @@
 
-
+const init = require('../modules/_init');
 
 
 function InputHandler() {
