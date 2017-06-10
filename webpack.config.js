@@ -6,6 +6,7 @@ module.exports = {
 		path: path.resolve(__dirname, './temp/assets/scripts/'),
 		filename: "app.js"
 	},
+
 	module: {
     loaders: [
       {
@@ -18,4 +19,5 @@ module.exports = {
       }
     ]
   }
+  console.log(__dirname)
 }

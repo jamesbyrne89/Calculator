@@ -88,7 +88,7 @@ gulp.task('bundle', function(callback){
 	});
 
 // rebundle scripts when changes are made
-watch('app/assets/scripts/**/*.js',['bundle'], function(){
+watch('app/assets/scripts/**/*.js', function(){
   gulp.start('rebundle');
 });
 
