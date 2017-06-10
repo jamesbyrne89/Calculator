@@ -69,9 +69,9 @@
 				// *
 				else if (e.keyCode === 57 || e.keyCode === 106) {
 				handleInput.getInput();
-				handleInput.checkDuplicates(this.innerText);
-				if (!handleInput.checkDuplicates(this.innerText) && input.innerText.length > 0) {
-					handleInput.updateView(this.innerText);
+				handleInput.checkDuplicates('*');
+				if (!handleInput.checkDuplicates('*') && input.innerText.length > 0) {
+					handleInput.updateView('*');
 				} else {
 					return;
 				}
@@ -79,9 +79,9 @@
 				// +
 				else if (e.keyCode === 107) {
 				handleInput.getInput();
-				handleInput.checkDuplicates(this.innerText);
-				if (!handleInput.checkDuplicates(this.innerText) && input.innerText.length > 0) {
-					handleInput.updateView(this.innerText);
+				handleInput.checkDuplicates('+');
+				if (!handleInput.checkDuplicates('+') && input.innerText.length > 0) {
+					handleInput.updateView('+');
 				} else {
 					return;
 				}
@@ -89,9 +89,9 @@
 				// -
 				else if (e.keyCode === 109 || e.keyCode === 189) {
 				handleInput.getInput();
-				handleInput.checkDuplicates(this.innerText);
-				if (!handleInput.checkDuplicates(this.innerText) && input.innerText.length > 0) {
-					handleInput.updateView(this.innerText);
+				handleInput.checkDuplicates('-');
+				if (!handleInput.checkDuplicates('-') && input.innerText.length > 0) {
+					handleInput.updateView('-');
 				} else {
 					return;
 				}
@@ -99,9 +99,9 @@
 				// .
 				else if (e.keyCode === 110 || e.keyCode === 190) {
 				handleInput.getInput();
-				handleInput.checkDuplicates(this.innerText);
-				if (!handleInput.checkDuplicates(this.innerText) && input.innerText.length > 0) {
-					handleInput.updateView(this.innerText);
+				handleInput.checkDuplicates('.');
+				if (!handleInput.checkDuplicates('.') && input.innerText.length > 0) {
+					handleInput.updateView('.');
 				} else {
 					return;
 				}
@@ -109,9 +109,9 @@
 				// /
 				else if (e.keyCode === 111 || e.keyCode === 191) {
 				handleInput.getInput();
-				handleInput.checkDuplicates(this.innerText);
-				if (!handleInput.checkDuplicates(this.innerText) && input.innerText.length > 0) {
-					handleInput.updateView(this.innerText);
+				handleInput.checkDuplicates('/');
+				if (!handleInput.checkDuplicates('/') && input.innerText.length > 0) {
+					handleInput.updateView('/');
 				} else {
 					return;
 				}
@@ -162,7 +162,6 @@
 
 	};
 
-	_setInitialState();
 	_listen();
 	_attachKeyboardEvents();
 
