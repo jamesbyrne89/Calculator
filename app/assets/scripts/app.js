@@ -7,10 +7,7 @@
 	const percentage = document.getElementById('percentage');
 	const operators = document.getElementsByClassName('operator');
 
-	const _setInitialState = function _setInitialState() {
-		input.innerText = '';
-	};
-
+	// Add keyboard events
 	const _attachKeyboardEvents = function _attachKeyboardEvents() {
 		document.body.addEventListener('keydown', function(e) {
 				let handleInput = new InputHandler();
@@ -88,15 +85,44 @@
 				} else {
 					return;
 				}
-				}													
+				}
+				// -
+				else if (e.keyCode === 109 || e.keyCode === 189) {
+				handleInput.getInput();
+				handleInput.checkDuplicates(this.innerText);
+				if (!handleInput.checkDuplicates(this.innerText) && input.innerText.length > 0) {
+					handleInput.updateView(this.innerText);
+				} else {
+					return;
+				}
+				}					
+				// .
+				else if (e.keyCode === 110 || e.keyCode === 190) {
+				handleInput.getInput();
+				handleInput.checkDuplicates(this.innerText);
+				if (!handleInput.checkDuplicates(this.innerText) && input.innerText.length > 0) {
+					handleInput.updateView(this.innerText);
+				} else {
+					return;
+				}
+				}				
+				// /
+				else if (e.keyCode === 111 || e.keyCode === 191) {
+				handleInput.getInput();
+				handleInput.checkDuplicates(this.innerText);
+				if (!handleInput.checkDuplicates(this.innerText) && input.innerText.length > 0) {
+					handleInput.updateView(this.innerText);
+				} else {
+					return;
+				}
+				}																	
 				 else {
 					return;
 				}
 			})
-			// Add event listeners
-
 	}
 
+	// Add event listeners
 	const _listen = function _listen() {
 		let handleInput = new InputHandler();
 		Array.prototype.forEach.call(numbers, (function(item) {
