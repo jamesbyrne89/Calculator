@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 2);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -76,7 +76,7 @@
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-console.log('loaded _init.js file')(function init() {
+function init() {
 	var numbers = document.getElementsByClassName('btn__number');
 	var equalsBtn = document.getElementById('equals');
 	var ac = document.getElementById('ac');
@@ -85,7 +85,6 @@ console.log('loaded _init.js file')(function init() {
 
 	// Add keyboard events
 	var _attachKeyboardEvents = function _attachKeyboardEvents() {
-		console.log('Attaching keyboard events');
 		document.body.addEventListener('keydown', function (e) {
 			var handleInput = new InputHandler();
 			// 0
@@ -205,7 +204,6 @@ console.log('loaded _init.js file')(function init() {
 
 	// Add event listeners
 	var _listen = function _listen() {
-		console.log('Attaching click listeners');
 		var handleInput = new InputHandler();
 		Array.prototype.forEach.call(numbers, function (item) {
 			item.addEventListener('click', function () {
@@ -245,9 +243,9 @@ console.log('loaded _init.js file')(function init() {
 
 	_listen();
 	_attachKeyboardEvents();
-})();
+};
 
-exports.default = init;
+exports.default = _init;
 
 /***/ }),
 /* 1 */
@@ -256,9 +254,13 @@ exports.default = init;
 "use strict";
 
 
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
+var _init = __webpack_require__(0);
+
+var _init2 = _interopRequireDefault(_init);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+(0, _init2.default)();
 
 function InputHandler() {
 
@@ -299,27 +301,6 @@ function InputHandler() {
 		}
 	};
 };
-
-exports.default = InputHandler;
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _init = __webpack_require__(0);
-
-var _init2 = _interopRequireDefault(_init);
-
-var _input = __webpack_require__(1);
-
-var _input2 = _interopRequireDefault(_input);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-console.log('loaded main app.js file');
 
 /***/ })
 /******/ ]);

@@ -1,5 +1,6 @@
+console.log('loaded _init.js file')
+
 (function init() {
-	alert('Scripts are working!')
 	const numbers = document.getElementsByClassName('btn__number');
 	const equalsBtn = document.getElementById('equals');
 	const ac = document.getElementById('ac');
@@ -8,6 +9,7 @@
 
 	// Add keyboard events
 	const _attachKeyboardEvents = function _attachKeyboardEvents() {
+		console.log('Attaching keyboard events')
 		document.body.addEventListener('keydown', function(e) {
 			let handleInput = new InputHandler();
 			// 0
@@ -127,6 +129,7 @@
 
 	// Add event listeners
 	const _listen = function _listen() {
+		console.log('Attaching click listeners')
 		let handleInput = new InputHandler();
 		Array.prototype.forEach.call(numbers, (function(item) {
 			item.addEventListener('click', function() {

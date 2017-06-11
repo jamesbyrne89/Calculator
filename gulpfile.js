@@ -77,25 +77,33 @@ gulp.task('cssInject', ['compilecss'], function(){
 });
 
 // Webpack
-gulp.task('bundle', function(callback){
-	webpack(require('./webpack.config.js'), function(err, stats){
-		if(err) {
-			console.log(err.toString());
-		}
-		console.log(stats.toString());
-		callback();
-		});
-	});
+// gulp.task('bundle', function(callback){
+// 	webpack(require('./webpack.config.js'), function(err, stats){
+// 		if(err) {
+// 			console.log(err.toString());
+// 		}
+// 		console.log(stats.toString());
+// 		callback();
+// 		});
+// 	});
 
-// rebundle scripts when changes are made
 watch('app/assets/scripts/**/*.js', function(){
-  gulp.start('rebundle');
+  browserSync.reload();
 });
 
+watch('app/assets/scripts/**/*.js', function(){
+  gulp.start('babel');
+});
+
+// rebundle scripts when changes are made
+// watch('app/assets/scripts/**/*.js', function(){
+//   gulp.start('rebundle');
+// });
+
 // Reload browsersync
-gulp.task('rebundle', ['bundle'], function(){
-	browserSync.reload();
-	});
+// gulp.task('rebundle', ['bundle'], function(){
+// 	browserSync.reload();
+// 	});
 
 // Optimise images
 gulp.task('optimiseImages', function(){
@@ -118,12 +126,12 @@ gulp.task('babel', () => {
         .pipe(babel({
             presets: ['es2015']
         }))
-        .pipe(gulp.dest('app/temp/assets/scripts/babel'));
+        .pipe(gulp.dest('app/assets/scripts/babel'));
 });
 
 // Minify Javascript
 gulp.task('compressScripts', ['babel', 'deleteDistFolder'], function(){
- return gulp.src('app/temp/assets/scripts/babel/*.js')
+ return gulp.src('app/assets/scripts/babel/*.js')
   .pipe(uglify())
   .pipe(gulp.dest('docs/assets/scripts'));
 });
@@ -146,7 +154,7 @@ gulp.task('copyGeneralFiles', ['deleteDistFolder'], function() {
 });
 
 // Build final
-gulp.task('build', ['deleteDistFolder', 'copyGeneralFiles', 'optimiseImages', 'usemin']);
+gulp.task('build', ['deleteDistFolder', 'copyGeneralFiles', 'usemin']);
 
 // Usemin
 gulp.task('usemin', ['deleteDistFolder', 'compilecss'], function(){
