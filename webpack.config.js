@@ -3,7 +3,7 @@ const path = require('path');
 module.exports = {
 	entry: "./app/assets/scripts/app.js",
 	output: {
-		path: path.resolve(__dirname, './temp/assets/scripts/'),
+		path: path.resolve(__dirname, './app/assets/scripts/bundled'),
 		filename: "app.js"
 	},
 
@@ -19,5 +19,4 @@ module.exports = {
       }
     ]
   }
-  console.log(__dirname)
 }

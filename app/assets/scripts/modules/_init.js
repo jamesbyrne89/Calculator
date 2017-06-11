@@ -1,4 +1,5 @@
-function init() {
+(function init() {
+	alert('Scripts are working!')
 	const numbers = document.getElementsByClassName('btn__number');
 	const equalsBtn = document.getElementById('equals');
 	const ac = document.getElementById('ac');
@@ -167,6 +168,6 @@ function init() {
 	_listen();
 	_attachKeyboardEvents();
 
-};
+})();
 
-export default _init;
+export default init;

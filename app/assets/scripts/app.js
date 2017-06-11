@@ -1,6 +1,5 @@
-//import init from './modules/_init.js';
+import init from './modules/_init.js';
 
-//init();
 
 function InputHandler() {
 
