@@ -2,6 +2,7 @@
 	const numbers = document.getElementsByClassName('btn__number');
 	const equalsBtn = document.getElementById('equals');
 	const ac = document.getElementById('ac');
+	const plusMinus = document.getElementById('plus-minus');
 	const percentage = document.getElementById('percentage');
 	const operators = document.getElementsByClassName('operator');
 
@@ -145,6 +146,11 @@
 			output.innerText = '';
 		});
 
+		plusMinus.addEventListener('click', function(){
+				handleInput.getInput();
+				handleInput.updateView('-');			
+		});
+
 		Array.prototype.forEach.call(operators, (function(item) {
 			item.addEventListener('click', function() {
 				handleInput.getInput();
@@ -180,7 +186,7 @@ function InputHandler() {
 	};
 
 	this.checkDuplicates = function _checkDuplicates(pressed) {
-		const operators = ['X', '%', '/', '-', '.', '+']
+		const operators = ['X', '%', '/', '-', '.', '+'];
 		if (operators.indexOf(input.innerText.slice(-1))) {
 			return false;
 		} else {
@@ -205,7 +211,7 @@ function InputHandler() {
 			output.innerText = finalTotal.toFixed(9 - finalTotal.toString().length);
 		} else {
 			output.innerText = finalTotal;
-		}
+		};
 	};
 
 };
