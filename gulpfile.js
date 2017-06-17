@@ -18,7 +18,8 @@ del = require('del'),
 debug = require('gulp-debug'),
 rev = require('gulp-rev'),
 beautify = require('gulp-jsbeautify'),
-webpack = require('webpack');
+webpack = require('webpack'),
+jslint = require('gulp-jslint');
 
 // Default task that runs on 'Gulp' command
 
@@ -87,6 +88,14 @@ gulp.task('cssInject', ['compilecss'], function(){
 // 		});
 // 	});
 
+// Lint Javascript
+//gulp.task('default', function () {
+//    return gulp.src(['app/assets/scripts/**/*.js'])
+//            .pipe(jslint({ /* this object represents the JSLint directives being passed down */ }))
+//           .pipe(jslint.reporter('default', errorsOnly))
+//            .pipe(jslint.reporter('stylish', options));
+//});
+
 watch('app/assets/scripts/**/*.js', function(){
   browserSync.reload();
 });
@@ -121,6 +130,7 @@ gulp.task('deleteDistFolder', function(){
   return del('./docs');
 })
 
+// Babel
 gulp.task('babel', () => {
     return gulp.src('app/assets/scripts/*.js')
         .pipe(babel({
