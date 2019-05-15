@@ -1,4 +1,5 @@
-import {IButton} from './types';
+import { IButton } from './types';
+import { actions } from './constants';
 
 const calculator = document.querySelector('.calculator');
 const buttons = document.querySelector('.calculator__buttons');
@@ -10,6 +11,10 @@ function buttonHandler(e) {
     if (!action) {
       // Is number key
       console.log('number key pressed');
+    }
+
+    if (Object.keys(actions).includes(action)) {
+      console.log('operator key pressed');
     }
   }
 }
