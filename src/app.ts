@@ -1,8 +1,10 @@
+import {IButton} from './types';
+
 const calculator = document.querySelector('.calculator');
 const buttons = document.querySelector('.calculator__buttons');
 
 function buttonHandler(e) {
-  const button = e.target;
+  const button: IButton = e.target;
   if (button.matches('.calculator__button')) {
     const action = button.dataset.action;
     if (!action) {
