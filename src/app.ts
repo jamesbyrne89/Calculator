@@ -1,25 +1,39 @@
-import { IButton } from './types';
-import { actions } from './constants';
+import { IButton } from "./types";
+import { actions } from "./constants";
+import operatorHandlers from "./operatorHandlers";
 
-const calculator = document.querySelector('.calculator');
-const buttons = document.querySelector('.calculator__buttons');
+const calculator = document.querySelector(".calculator");
+const buttons = document.querySelector(".calculator__buttons");
 
 function buttonHandler(e) {
-  const button: IButton = e.target;
-  if (button.matches('.calculator__button')) {
-    const action = button.dataset.action;
+  const button: HTMLElement = e.target;
+
+  if (button.matches(".calculator__button")) {
+    const action: string = button.dataset.action;
+    const buttonValue: string = button.textContent;
+    let display: HTMLElement = document.querySelector(".calculator__output");
+    const currentOutput = display.textContent;
     if (!action) {
       // Is number key
-      console.log('number key pressed');
+      if (currentOutput === "0") {
+        console.log(currentOutput, buttonValue)
+        display.textContent = buttonValue;
+      }
+      else {
+        display.textContent = currentOutput + buttonValue;
+      }
+      console.log("number key pressed");
+      return;
     }
 
-    if (Object.keys(actions).includes(action)) {
-      console.log('operator key pressed');
+    if (Object.keys(actions).includes(action.toUpperCase())) {
+      console.log("operator key pressed");
+      operatorHandlers[action](display, currentOutput);
     }
   }
 }
 
-buttons.addEventListener('click', buttonHandler);
+buttons.addEventListener("click", buttonHandler);
 
 // (function init() {
 //   const numbers = document.getElementsByClassName('btn__number');

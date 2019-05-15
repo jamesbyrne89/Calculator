@@ -11,8 +11,9 @@
     "babel-loader": "^7.0.0",
     "babel-preset-es2015": "^6.24.1",
     "gulp-jslint": "^1.0.10",
-    "webpack-stats-plugin": "^0.1.5",
-    "webpack": "^2.6.1"
+    "parcel-bundler": "^1.12.3",
+    "webpack": "^2.6.1",
+    "webpack-stats-plugin": "^0.1.5"
   },
   "devDependencies": {
     "typescript": "^3.4.5"

@@ -13,12 +13,22 @@
  *~ Otherwise, delete this declaration.
  */
 
- export interface IButton {
-     dataset: {
-         action: string
-     }
- }
+export interface IButton {
+  dataset: {
+    action: string;
+  };
+}
 
- export interface ITest {
-     testval: boolean
- }
+export interface ITest {
+  testval: boolean;
+}
+
+export interface IActions {
+  ADD: "add";
+  SUBTRACT: "subtract";
+  MULTIPLY: "multiply";
+  DIVIDE: "divide";
+  DECIMAL: "decimal";
+  EQUALS: "equals";
+  CLEAR: "clear";
+}
