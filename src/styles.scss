@@ -59,6 +59,10 @@ body {
             justify-content: center;
         }
 
+        &:active {
+            opacity: 0.5;
+        }
+
         &.input {
             color: #abb4bc;
             display: block;

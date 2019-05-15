@@ -135,8 +135,9 @@ exports.actions = {
 
 exports.__esModule = true;
 
-function decimal() {
+function decimal(display, currentOutput) {
   console.log("decimal clicked");
+  display.textContent = currentOutput + "0";
 }
 
 function clear(display, currentOutput) {
@@ -169,6 +170,21 @@ var operatorHandlers_1 = __importDefault(require("./operatorHandlers"));
 
 var calculator = document.querySelector(".calculator");
 var buttons = document.querySelector(".calculator__buttons");
+var display = document.querySelector(".calculator__output");
+var previousButtonType = null;
+
+function handleNumberInput(currentOutput, buttonValue) {
+  if (currentOutput === "0") {
+    console.log(currentOutput, buttonValue);
+    display.textContent = buttonValue;
+  } else {
+    display.textContent = currentOutput + buttonValue;
+  }
+}
+
+function handleOperator(action, currentOutput) {
+  return operatorHandlers_1["default"][action](display, currentOutput);
+}
 
 function buttonHandler(e) {
   var button = e.target;
@@ -176,25 +192,17 @@ function buttonHandler(e) {
   if (button.matches(".calculator__button")) {
     var action = button.dataset.action;
     var buttonValue = button.textContent;
-    var display = document.querySelector(".calculator__output");
     var currentOutput = display.textContent;
 
     if (!action) {
       // Is number key
-      if (currentOutput === "0") {
-        console.log(currentOutput, buttonValue);
-        display.textContent = buttonValue;
-      } else {
-        display.textContent = currentOutput + buttonValue;
-      }
-
-      console.log("number key pressed");
-      return;
+      previousButtonType = 'number';
+      return handleNumberInput(currentOutput, buttonValue);
     }
 
     if (Object.keys(constants_1.actions).includes(action.toUpperCase())) {
-      console.log("operator key pressed");
-      operatorHandlers_1["default"][action](display, currentOutput);
+      previousButtonType = 'operator';
+      return handleOperator(action, currentOutput);
     }
   }
 }
@@ -433,7 +441,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53789" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59989" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

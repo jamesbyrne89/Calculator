@@ -4,9 +4,10 @@ import operatorHandlers from "./operatorHandlers";
 
 const calculator = document.querySelector(".calculator");
 const buttons = document.querySelector(".calculator__buttons");
+const display: HTMLElement = document.querySelector(".calculator__output");
+let previousButtonType = null;
 
 function handleNumberInput(currentOutput, buttonValue) {
-  const display: HTMLElement = document.querySelector(".calculator__output");
   if (currentOutput === "0") {
     console.log(currentOutput, buttonValue)
     display.textContent = buttonValue;
@@ -16,6 +17,10 @@ function handleNumberInput(currentOutput, buttonValue) {
   }
 }
 
+function handleOperator(action, currentOutput) {
+  return operatorHandlers[action](display, currentOutput);
+}
+
 function buttonHandler(e) {
   const button: HTMLElement = e.target;
 
@@ -23,16 +28,16 @@ function buttonHandler(e) {
     const action: string = button.dataset.action;
     const buttonValue: string = button.textContent;
     const currentOutput = display.textContent;
-    
+
     if (!action) {
       // Is number key
-      console.log("number key pressed");
+      previousButtonType = 'number';
       return handleNumberInput(currentOutput, buttonValue);
     }
 
     if (Object.keys(actions).includes(action.toUpperCase())) {
-      console.log("operator key pressed");
-      operatorHandlers[action](display, currentOutput);
+      previousButtonType = 'operator';
+      return handleOperator(action, currentOutput);
     }
   }
 }
