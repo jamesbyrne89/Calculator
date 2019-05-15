@@ -1,9 +1,10 @@
-function decimal() {
+function decimal(display, currentOutput) {
   console.log("decimal clicked");
+  display.textContent = currentOutput + "0";
 }
 
 function clear(display, currentOutput) {
-    display.textContent = "0";
+  display.textContent = "0";
 }
 
 function equals() {

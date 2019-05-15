@@ -5,25 +5,29 @@ import operatorHandlers from "./operatorHandlers";
 const calculator = document.querySelector(".calculator");
 const buttons = document.querySelector(".calculator__buttons");
 
+function handleNumberInput(currentOutput, buttonValue) {
+  const display: HTMLElement = document.querySelector(".calculator__output");
+  if (currentOutput === "0") {
+    console.log(currentOutput, buttonValue)
+    display.textContent = buttonValue;
+  }
+  else {
+    display.textContent = currentOutput + buttonValue;
+  }
+}
+
 function buttonHandler(e) {
   const button: HTMLElement = e.target;
 
   if (button.matches(".calculator__button")) {
     const action: string = button.dataset.action;
     const buttonValue: string = button.textContent;
-    let display: HTMLElement = document.querySelector(".calculator__output");
     const currentOutput = display.textContent;
+    
     if (!action) {
       // Is number key
-      if (currentOutput === "0") {
-        console.log(currentOutput, buttonValue)
-        display.textContent = buttonValue;
-      }
-      else {
-        display.textContent = currentOutput + buttonValue;
-      }
       console.log("number key pressed");
-      return;
+      return handleNumberInput(currentOutput, buttonValue);
     }
 
     if (Object.keys(actions).includes(action.toUpperCase())) {
