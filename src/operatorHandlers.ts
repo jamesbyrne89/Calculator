@@ -1,6 +1,5 @@
 function decimal(display, currentOutput) {
-  console.log("decimal clicked");
-  display.textContent = currentOutput + "0";
+  display.textContent = currentOutput + ".";
 }
 
 function clear(display, currentOutput) {
@@ -11,8 +10,14 @@ function equals() {
   console.log("equals clicked");
 }
 
+function add(display, currentOutput) {
+  console.log('add clicked')
+  display.textContent = currentOutput + "+";
+}
+
 export default {
   decimal,
   clear,
-  equals
+  equals,
+  add
 };

@@ -136,8 +136,7 @@ exports.actions = {
 exports.__esModule = true;
 
 function decimal(display, currentOutput) {
-  console.log("decimal clicked");
-  display.textContent = currentOutput + "0";
+  display.textContent = currentOutput + ".";
 }
 
 function clear(display, currentOutput) {
@@ -148,10 +147,16 @@ function equals() {
   console.log("equals clicked");
 }
 
+function add(display, currentOutput) {
+  console.log('add clicked');
+  display.textContent = currentOutput + "+";
+}
+
 exports["default"] = {
   decimal: decimal,
   clear: clear,
-  equals: equals
+  equals: equals,
+  add: add
 };
 },{}],"app.ts":[function(require,module,exports) {
 "use strict";
@@ -173,8 +178,8 @@ var buttons = document.querySelector(".calculator__buttons");
 var display = document.querySelector(".calculator__output");
 var previousButtonType = null;
 
-function handleNumberInput(currentOutput, buttonValue) {
-  if (currentOutput === "0") {
+function handleNumberInput(currentOutput, buttonValue, previousButtonType) {
+  if (currentOutput === "0" || previousButtonType === 'operator') {
     console.log(currentOutput, buttonValue);
     display.textContent = buttonValue;
   } else {
@@ -197,7 +202,7 @@ function buttonHandler(e) {
     if (!action) {
       // Is number key
       previousButtonType = 'number';
-      return handleNumberInput(currentOutput, buttonValue);
+      return handleNumberInput(currentOutput, buttonValue, previousButtonType);
     }
 
     if (Object.keys(constants_1.actions).includes(action.toUpperCase())) {
@@ -441,7 +446,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59989" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52098" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

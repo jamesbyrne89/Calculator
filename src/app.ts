@@ -7,8 +7,8 @@ const buttons = document.querySelector(".calculator__buttons");
 const display: HTMLElement = document.querySelector(".calculator__output");
 let previousButtonType = null;
 
-function handleNumberInput(currentOutput, buttonValue) {
-  if (currentOutput === "0") {
+function handleNumberInput(currentOutput, buttonValue, previousButtonType) {
+  if (currentOutput === "0" || previousButtonType === 'operator') {
     console.log(currentOutput, buttonValue)
     display.textContent = buttonValue;
   }
@@ -32,7 +32,7 @@ function buttonHandler(e) {
     if (!action) {
       // Is number key
       previousButtonType = 'number';
-      return handleNumberInput(currentOutput, buttonValue);
+      return handleNumberInput(currentOutput, buttonValue, previousButtonType);
     }
 
     if (Object.keys(actions).includes(action.toUpperCase())) {
