@@ -135,21 +135,40 @@ exports.actions = {
 
 exports.__esModule = true;
 
-function decimal(display, currentOutput) {
-  display.textContent = currentOutput + ".";
+var app_1 = require("./app");
+
+var constants_1 = require("./constants");
+
+function decimal(currentOutput) {
+  app_1.display.textContent = currentOutput + ".";
 }
 
-function clear(display, currentOutput) {
-  display.textContent = "0";
+function clear(currentOutput) {
+  app_1.display.textContent = "0";
 }
 
-function equals() {
-  console.log("equals clicked");
+function add(currentOutput) {
+  console.log("add clicked");
+  app_1.state.operator = constants_1.actions.ADD;
 }
 
-function add(display, currentOutput) {
-  console.log('add clicked');
-  display.textContent = currentOutput + "+";
+function calculate(firstVal, operator, secondVal) {
+  var result;
+
+  if (operator === "add") {
+    result = parseInt(firstVal, 10) + parseInt(secondVal, 10);
+  }
+
+  return result.toString();
+}
+
+function equals(firstVal, operator, secondVal) {
+  console.log("equals clicked", {
+    firstVal: firstVal,
+    operator: operator,
+    secondVal: secondVal
+  });
+  app_1.display.textContent = calculate(firstVal, operator, secondVal);
 }
 
 exports["default"] = {
@@ -158,7 +177,7 @@ exports["default"] = {
   equals: equals,
   add: add
 };
-},{}],"app.ts":[function(require,module,exports) {
+},{"./app":"app.ts","./constants":"constants.ts"}],"app.ts":[function(require,module,exports) {
 "use strict";
 
 var __importDefault = this && this.__importDefault || function (mod) {
@@ -175,24 +194,29 @@ var operatorHandlers_1 = __importDefault(require("./operatorHandlers"));
 
 var calculator = document.querySelector(".calculator");
 var buttons = document.querySelector(".calculator__buttons");
-var display = document.querySelector(".calculator__output");
-var state = {
+exports.display = document.querySelector(".calculator__output");
+exports.state = {
   previousButtonType: null,
   firstValue: "0",
   operator: null
 };
 
 function handleNumberInput(currentOutput, buttonValue, previousButtonType) {
+  console.log({
+    previousButtonType: previousButtonType,
+    currentOutput: currentOutput
+  });
+
   if (currentOutput === "0" || previousButtonType === "operator") {
     console.log(currentOutput, buttonValue);
-    display.textContent = buttonValue;
+    exports.display.textContent = buttonValue;
   } else {
-    display.textContent = currentOutput + buttonValue;
+    exports.display.textContent = currentOutput + buttonValue;
   }
 }
 
 function handleOperator(action, currentOutput) {
-  return operatorHandlers_1["default"][action](display, currentOutput);
+  return operatorHandlers_1["default"][action](currentOutput);
 }
 
 function buttonHandler(e) {
@@ -201,17 +225,22 @@ function buttonHandler(e) {
   if (button.matches(".calculator__button")) {
     var action = button.dataset.action;
     var buttonValue = button.textContent;
-    var currentOutput = display.textContent;
+    var currentOutput = exports.display.textContent;
 
     if (!action) {
       // Is number key
-      state.previousButtonType = "number";
-      return handleNumberInput(currentOutput, buttonValue, state.previousButtonType);
+      return handleNumberInput(currentOutput, buttonValue, exports.state.previousButtonType);
     }
 
     if (Object.keys(constants_1.actions).includes(action.toUpperCase())) {
-      state.previousButtonType = "operator";
-      state.firstValue = currentOutput;
+      exports.state.previousButtonType = "operator";
+      exports.state.firstValue = currentOutput;
+
+      if (action === constants_1.actions.EQUALS) {
+        return operatorHandlers_1["default"].equals(exports.state.firstValue, exports.state.operator, currentOutput);
+      }
+
+      console.log(exports.state);
       return handleOperator(action, currentOutput);
     }
   }
@@ -451,7 +480,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55840" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52129" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -1,18 +1,31 @@
-function decimal(display, currentOutput) {
+import { display, state } from "./app";
+import { actions } from "./constants";
+
+function decimal(currentOutput) {
   display.textContent = currentOutput + ".";
 }
 
-function clear(display, currentOutput) {
+function clear(currentOutput) {
   display.textContent = "0";
 }
 
-function equals() {
-  console.log("equals clicked");
+function add(currentOutput) {
+  console.log("add clicked");
+  state.operator = actions.ADD;
 }
 
-function add(display, currentOutput) {
-  console.log('add clicked')
-  display.textContent = currentOutput + "+";
+function calculate(firstVal, operator, secondVal): string {
+  let result;
+  if (operator === "add") {
+    result = parseInt(firstVal, 10) + parseInt(secondVal, 10);
+  }
+  return result.toString();
+}
+
+function equals(firstVal, operator, secondVal) {
+  console.log("equals clicked", { firstVal, operator, secondVal });
+
+  display.textContent = calculate(firstVal, operator, secondVal);
 }
 
 export default {

@@ -4,15 +4,16 @@ import operatorHandlers from "./operatorHandlers";
 
 const calculator = document.querySelector(".calculator");
 const buttons = document.querySelector(".calculator__buttons");
-const display: HTMLElement = document.querySelector(".calculator__output");
+export const display: HTMLElement = document.querySelector(".calculator__output");
 
-const state: IState = {
+export const state: IState = {
   previousButtonType: null,
   firstValue: "0",
   operator: null
 };
 
 function handleNumberInput(currentOutput, buttonValue, previousButtonType) {
+  console.log({previousButtonType, currentOutput})
   if (currentOutput === "0" || previousButtonType === "operator") {
     console.log(currentOutput, buttonValue);
     display.textContent = buttonValue;
@@ -22,7 +23,7 @@ function handleNumberInput(currentOutput, buttonValue, previousButtonType) {
 }
 
 function handleOperator(action, currentOutput) {
-  return operatorHandlers[action](display, currentOutput);
+  return operatorHandlers[action](currentOutput);
 }
 
 function buttonHandler(e) {
@@ -35,7 +36,6 @@ function buttonHandler(e) {
 
     if (!action) {
       // Is number key
-      state.previousButtonType = "number";
       return handleNumberInput(
         currentOutput,
         buttonValue,
@@ -46,6 +46,10 @@ function buttonHandler(e) {
     if (Object.keys(actions).includes(action.toUpperCase())) {
       state.previousButtonType = "operator";
       state.firstValue = currentOutput;
+      if (action === actions.EQUALS) {
+        return operatorHandlers.equals(state.firstValue, state.operator, currentOutput)
+      }
+      console.log(state)
       return handleOperator(action, currentOutput);
     }
   }
