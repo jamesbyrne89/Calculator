@@ -1,18 +1,22 @@
-import { IButton } from "./types";
+import { IState } from "./types";
 import { actions } from "./constants";
 import operatorHandlers from "./operatorHandlers";
 
 const calculator = document.querySelector(".calculator");
 const buttons = document.querySelector(".calculator__buttons");
 const display: HTMLElement = document.querySelector(".calculator__output");
-let previousButtonType = null;
+
+const state: IState = {
+  previousButtonType: null,
+  firstValue: "0",
+  operator: null
+};
 
 function handleNumberInput(currentOutput, buttonValue, previousButtonType) {
-  if (currentOutput === "0" || previousButtonType === 'operator') {
-    console.log(currentOutput, buttonValue)
+  if (currentOutput === "0" || previousButtonType === "operator") {
+    console.log(currentOutput, buttonValue);
     display.textContent = buttonValue;
-  }
-  else {
+  } else {
     display.textContent = currentOutput + buttonValue;
   }
 }
@@ -31,12 +35,17 @@ function buttonHandler(e) {
 
     if (!action) {
       // Is number key
-      previousButtonType = 'number';
-      return handleNumberInput(currentOutput, buttonValue, previousButtonType);
+      state.previousButtonType = "number";
+      return handleNumberInput(
+        currentOutput,
+        buttonValue,
+        state.previousButtonType
+      );
     }
 
     if (Object.keys(actions).includes(action.toUpperCase())) {
-      previousButtonType = 'operator';
+      state.previousButtonType = "operator";
+      state.firstValue = currentOutput;
       return handleOperator(action, currentOutput);
     }
   }
