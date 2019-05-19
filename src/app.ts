@@ -1,20 +1,22 @@
-import { IState } from "./types";
-import { actions } from "./constants";
-import operatorHandlers from "./operatorHandlers";
+import { IState } from './types';
+import { actions } from './constants';
+import operatorHandlers from './operatorHandlers';
 
-const calculator = document.querySelector(".calculator");
-const buttons = document.querySelector(".calculator__buttons");
-export const display: HTMLElement = document.querySelector(".calculator__output");
+const calculator = document.querySelector('.calculator');
+const buttons = document.querySelector('.calculator__buttons');
+export const display: HTMLElement = document.querySelector(
+  '.calculator__output'
+);
 
 export const state: IState = {
   previousButtonType: null,
-  firstValue: "0",
+  firstValue: '0',
   operator: null
 };
 
 function handleNumberInput(currentOutput, buttonValue, previousButtonType) {
-  console.log({previousButtonType, currentOutput})
-  if (currentOutput === "0" || previousButtonType === "operator") {
+  console.log({ previousButtonType, currentOutput });
+  if (currentOutput === '0' || previousButtonType === 'operator') {
     console.log(currentOutput, buttonValue);
     display.textContent = buttonValue;
   } else {
@@ -23,13 +25,14 @@ function handleNumberInput(currentOutput, buttonValue, previousButtonType) {
 }
 
 function handleOperator(action, currentOutput) {
+  console.log({ action, operatorHandlers });
   return operatorHandlers[action](currentOutput);
 }
 
 function buttonHandler(e) {
   const button: HTMLElement = e.target;
 
-  if (button.matches(".calculator__button")) {
+  if (button.matches('.calculator__button')) {
     const action: string = button.dataset.action;
     const buttonValue: string = button.textContent;
     const currentOutput = display.textContent;
@@ -44,18 +47,22 @@ function buttonHandler(e) {
     }
 
     if (Object.keys(actions).includes(action.toUpperCase())) {
-      state.previousButtonType = "operator";
-      state.firstValue = currentOutput;
+      state.previousButtonType = 'operator';
       if (action === actions.EQUALS) {
-        return operatorHandlers.equals(state.firstValue, state.operator, currentOutput)
+        return operatorHandlers.equals(
+          state.firstValue,
+          state.operator,
+          currentOutput
+        );
       }
-      console.log(state)
+      state.firstValue = currentOutput;
+      console.log(state);
       return handleOperator(action, currentOutput);
     }
   }
 }
 
-buttons.addEventListener("click", buttonHandler);
+buttons.addEventListener('click', buttonHandler);
 
 // (function init() {
 //   const numbers = document.getElementsByClassName('btn__number');

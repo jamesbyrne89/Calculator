@@ -122,13 +122,13 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 
 exports.__esModule = true;
 exports.actions = {
-  ADD: "add",
-  SUBTRACT: "subtract",
-  MULTIPLY: "multiply",
-  DIVIDE: "divide",
-  DECIMAL: "decimal",
-  EQUALS: "equals",
-  CLEAR: "clear"
+  ADD: 'add',
+  SUBTRACT: 'subtract',
+  MULTIPLY: 'multiply',
+  DIVIDE: 'divide',
+  DECIMAL: 'decimal',
+  EQUALS: 'equals',
+  CLEAR: 'clear'
 };
 },{}],"operatorHandlers.ts":[function(require,module,exports) {
 "use strict";
@@ -140,34 +140,55 @@ var app_1 = require("./app");
 var constants_1 = require("./constants");
 
 function decimal(currentOutput) {
-  app_1.display.textContent = currentOutput + ".";
+  app_1.display.textContent = currentOutput + '.';
 }
 
-function clear(currentOutput) {
-  app_1.display.textContent = "0";
+function clear() {
+  app_1.display.textContent = '0';
 }
 
-function add(currentOutput) {
-  console.log("add clicked");
+function add() {
   app_1.state.operator = constants_1.actions.ADD;
+}
+
+function subtract() {
+  app_1.state.operator = constants_1.actions.SUBTRACT;
 }
 
 function calculate(firstVal, operator, secondVal) {
   var result;
 
-  if (operator === "add") {
-    result = parseInt(firstVal, 10) + parseInt(secondVal, 10);
+  switch (operator) {
+    case constants_1.actions.ADD:
+      result = parseFloat(firstVal) + parseFloat(secondVal);
+      break;
+
+    case constants_1.actions.SUBTRACT:
+      result = parseFloat(firstVal) - parseFloat(secondVal);
+      break;
+
+    case constants_1.actions.MULTIPLY:
+      result = parseFloat(firstVal) * parseFloat(secondVal);
+      break;
+
+    case constants_1.actions.DIVIDE:
+      result = parseFloat(firstVal) / parseFloat(secondVal);
+      break;
+
+    default:
+      return '';
   }
 
   return result.toString();
 }
 
 function equals(firstVal, operator, secondVal) {
-  console.log("equals clicked", {
+  console.log('equals clicked', {
     firstVal: firstVal,
     operator: operator,
     secondVal: secondVal
   });
+  console.log(calculate(firstVal, operator, secondVal));
   app_1.display.textContent = calculate(firstVal, operator, secondVal);
 }
 
@@ -175,7 +196,8 @@ exports["default"] = {
   decimal: decimal,
   clear: clear,
   equals: equals,
-  add: add
+  add: add,
+  subtract: subtract
 };
 },{"./app":"app.ts","./constants":"constants.ts"}],"app.ts":[function(require,module,exports) {
 "use strict";
@@ -192,12 +214,12 @@ var constants_1 = require("./constants");
 
 var operatorHandlers_1 = __importDefault(require("./operatorHandlers"));
 
-var calculator = document.querySelector(".calculator");
-var buttons = document.querySelector(".calculator__buttons");
-exports.display = document.querySelector(".calculator__output");
+var calculator = document.querySelector('.calculator');
+var buttons = document.querySelector('.calculator__buttons');
+exports.display = document.querySelector('.calculator__output');
 exports.state = {
   previousButtonType: null,
-  firstValue: "0",
+  firstValue: '0',
   operator: null
 };
 
@@ -207,7 +229,7 @@ function handleNumberInput(currentOutput, buttonValue, previousButtonType) {
     currentOutput: currentOutput
   });
 
-  if (currentOutput === "0" || previousButtonType === "operator") {
+  if (currentOutput === '0' || previousButtonType === 'operator') {
     console.log(currentOutput, buttonValue);
     exports.display.textContent = buttonValue;
   } else {
@@ -216,13 +238,17 @@ function handleNumberInput(currentOutput, buttonValue, previousButtonType) {
 }
 
 function handleOperator(action, currentOutput) {
+  console.log({
+    action: action,
+    operatorHandlers: operatorHandlers_1["default"]
+  });
   return operatorHandlers_1["default"][action](currentOutput);
 }
 
 function buttonHandler(e) {
   var button = e.target;
 
-  if (button.matches(".calculator__button")) {
+  if (button.matches('.calculator__button')) {
     var action = button.dataset.action;
     var buttonValue = button.textContent;
     var currentOutput = exports.display.textContent;
@@ -233,20 +259,20 @@ function buttonHandler(e) {
     }
 
     if (Object.keys(constants_1.actions).includes(action.toUpperCase())) {
-      exports.state.previousButtonType = "operator";
-      exports.state.firstValue = currentOutput;
+      exports.state.previousButtonType = 'operator';
 
       if (action === constants_1.actions.EQUALS) {
         return operatorHandlers_1["default"].equals(exports.state.firstValue, exports.state.operator, currentOutput);
       }
 
+      exports.state.firstValue = currentOutput;
       console.log(exports.state);
       return handleOperator(action, currentOutput);
     }
   }
 }
 
-buttons.addEventListener("click", buttonHandler); // (function init() {
+buttons.addEventListener('click', buttonHandler); // (function init() {
 //   const numbers = document.getElementsByClassName('btn__number');
 //   const equalsBtn = document.getElementById('equals');
 //   const ac = document.getElementById('ac');
@@ -480,7 +506,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52129" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56492" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
