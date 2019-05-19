@@ -49,7 +49,7 @@ body {
       align-items: center;
       justify-content: center; }
     .calculator__button:active {
-      background: #f4f9ff; }
+      filter: brightness(0.9); }
     .calculator__button.input {
       color: #abb4bc;
       display: block;

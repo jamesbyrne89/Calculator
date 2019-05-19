@@ -62,7 +62,7 @@ body {
         }
 
         &:active {
-            background: #f4f9ff;
+            filter: brightness(0.9);
         }
 
         &.input {

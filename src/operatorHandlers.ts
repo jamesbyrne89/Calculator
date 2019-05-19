@@ -2,6 +2,12 @@ import { display, state } from './app';
 import { actions } from './constants';
 
 function decimal(currentOutput) {
+  if (currentOutput.includes('.')) {
+    return;
+  }
+  if (state.previousButtonType === 'operator') {
+    display.textContent = currentOutput + '.';
+  }
   display.textContent = currentOutput + '.';
 }
 
@@ -15,6 +21,10 @@ function add() {
 
 function subtract() {
   state.operator = actions.SUBTRACT;
+}
+
+function multiply() {
+  state.operator = actions.MULTIPLY;
 }
 
 function calculate(firstVal, operator, secondVal): string {
@@ -51,5 +61,6 @@ export default {
   clear,
   equals,
   add,
-  subtract
+  subtract,
+  calculate
 };

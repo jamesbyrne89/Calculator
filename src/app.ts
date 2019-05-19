@@ -10,15 +10,22 @@ export const display: HTMLElement = document.querySelector(
 
 export const state: IState = {
   previousButtonType: null,
-  firstValue: '0',
+  firstValue: null,
   operator: null
 };
 
 function handleNumberInput(currentOutput, buttonValue, previousButtonType) {
-  console.log({ previousButtonType, currentOutput });
-  if (currentOutput === '0' || previousButtonType === 'operator') {
-    console.log(currentOutput, buttonValue);
-    display.textContent = buttonValue;
+  console.log({ currentOutput, buttonValue, previousButtonType });
+  if (currentOutput === '0') {
+    return (display.textContent = buttonValue);
+  }
+  console.log(state);
+  if (state.firstValue && previousButtonType === 'operator') {
+    display.textContent = operatorHandlers.calculate(
+      state.firstValue,
+      state.operator,
+      buttonValue
+    );
   } else {
     display.textContent = currentOutput + buttonValue;
   }
