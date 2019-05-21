@@ -153,6 +153,10 @@ function decimal(currentOutput) {
 
 function clear() {
   app_1.display.textContent = '0';
+  app_1.state.firstValue = null;
+  app_1.state.operator = null;
+  app_1.state.secondValue = null;
+  app_1.state.previousButtonType = null;
 }
 
 function add() {
@@ -165,6 +169,10 @@ function subtract() {
 
 function multiply() {
   app_1.state.operator = constants_1.actions.MULTIPLY;
+}
+
+function divide() {
+  app_1.state.operator = constants_1.actions.DIVIDE;
 }
 
 function calculate(firstVal, operator, secondVal) {
@@ -210,6 +218,8 @@ exports["default"] = {
   equals: equals,
   add: add,
   subtract: subtract,
+  divide: divide,
+  multiply: multiply,
   calculate: calculate
 };
 },{"./app":"app.ts","./constants":"constants.ts"}],"app.ts":[function(require,module,exports) {
@@ -233,6 +243,7 @@ exports.display = document.querySelector('.calculator__output');
 exports.state = {
   previousButtonType: null,
   firstValue: null,
+  secondValue: null,
   operator: null
 };
 
@@ -240,27 +251,24 @@ function handleNumberInput(currentOutput, buttonValue, previousButtonType) {
   console.log({
     currentOutput: currentOutput,
     buttonValue: buttonValue,
-    previousButtonType: previousButtonType
+    previousButtonType: previousButtonType,
+    state: exports.state
   });
 
   if (currentOutput === '0') {
-    return exports.display.textContent = buttonValue;
+    exports.display.textContent = buttonValue;
+    return this;
   }
 
-  console.log(exports.state);
-
-  if (exports.state.firstValue && previousButtonType === 'operator') {
-    exports.display.textContent = operatorHandlers_1["default"].calculate(exports.state.firstValue, exports.state.operator, buttonValue);
+  if (exports.state.firstValue && previousButtonType === 'operator' && exports.state.secondValue === null) {
+    exports.display.textContent = buttonValue;
+    exports.state.secondValue = exports.display.textContent;
   } else {
-    exports.display.textContent = currentOutput + buttonValue;
+    exports.display.textContent += buttonValue;
   }
 }
 
 function handleOperator(action, currentOutput) {
-  console.log({
-    action: action,
-    operatorHandlers: operatorHandlers_1["default"]
-  });
   return operatorHandlers_1["default"][action](currentOutput);
 }
 
@@ -269,13 +277,14 @@ function buttonHandler(e) {
 
   if (button.matches('.calculator__button')) {
     var action = button.dataset.action;
-    var buttonValue = button.textContent;
+    var buttonValue = button.textContent.trim();
     var currentOutput = exports.display.textContent;
 
     if (!action) {
       // Is number key
       return handleNumberInput(currentOutput, buttonValue, exports.state.previousButtonType);
-    }
+    } // is action key
+
 
     if (Object.keys(constants_1.actions).includes(action.toUpperCase())) {
       exports.state.previousButtonType = 'operator';
@@ -525,7 +534,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57781" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55747" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

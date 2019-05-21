@@ -24,17 +24,18 @@ export interface ITest {
 }
 
 export interface IActions {
-  ADD: "add";
-  SUBTRACT: "subtract";
-  MULTIPLY: "multiply";
-  DIVIDE: "divide";
-  DECIMAL: "decimal";
-  EQUALS: "equals";
-  CLEAR: "clear";
+  ADD: 'add';
+  SUBTRACT: 'subtract';
+  MULTIPLY: 'multiply';
+  DIVIDE: 'divide';
+  DECIMAL: 'decimal';
+  EQUALS: 'equals';
+  CLEAR: 'clear';
 }
 
 export interface IState {
-  previousButtonType: "operator" | "number";
+  previousButtonType: 'operator' | 'number';
   firstValue: string;
   operator: string;
+  secondValue: string;
 }

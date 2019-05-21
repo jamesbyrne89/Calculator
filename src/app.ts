@@ -11,28 +11,29 @@ export const display: HTMLElement = document.querySelector(
 export const state: IState = {
   previousButtonType: null,
   firstValue: null,
+  secondValue: null,
   operator: null
 };
 
 function handleNumberInput(currentOutput, buttonValue, previousButtonType) {
-  console.log({ currentOutput, buttonValue, previousButtonType });
+  console.log({ currentOutput, buttonValue, previousButtonType, state });
   if (currentOutput === '0') {
-    return (display.textContent = buttonValue);
+    display.textContent = buttonValue;
+    return this;
   }
-  console.log(state);
-  if (state.firstValue && previousButtonType === 'operator') {
-    display.textContent = operatorHandlers.calculate(
-      state.firstValue,
-      state.operator,
-      buttonValue
-    );
+  if (
+    state.firstValue &&
+    previousButtonType === 'operator' &&
+    state.secondValue === null
+  ) {
+    display.textContent = buttonValue;
+    state.secondValue = display.textContent;
   } else {
-    display.textContent = currentOutput + buttonValue;
+    display.textContent += buttonValue;
   }
 }
 
 function handleOperator(action, currentOutput) {
-  console.log({ action, operatorHandlers });
   return operatorHandlers[action](currentOutput);
 }
 
@@ -41,7 +42,7 @@ function buttonHandler(e) {
 
   if (button.matches('.calculator__button')) {
     const action: string = button.dataset.action;
-    const buttonValue: string = button.textContent;
+    const buttonValue: string = button.textContent.trim();
     const currentOutput = display.textContent;
 
     if (!action) {
@@ -52,7 +53,7 @@ function buttonHandler(e) {
         state.previousButtonType
       );
     }
-
+    // is action key
     if (Object.keys(actions).includes(action.toUpperCase())) {
       state.previousButtonType = 'operator';
       if (action === actions.EQUALS) {

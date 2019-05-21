@@ -13,6 +13,10 @@ function decimal(currentOutput) {
 
 function clear() {
   display.textContent = '0';
+  state.firstValue = null;
+  state.operator = null;
+  state.secondValue = null;
+  state.previousButtonType = null;
 }
 
 function add() {
@@ -25,6 +29,10 @@ function subtract() {
 
 function multiply() {
   state.operator = actions.MULTIPLY;
+}
+
+function divide() {
+  state.operator = actions.DIVIDE;
 }
 
 function calculate(firstVal, operator, secondVal): string {
@@ -62,5 +70,7 @@ export default {
   equals,
   add,
   subtract,
+  divide,
+  multiply,
   calculate
 };
