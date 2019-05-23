@@ -240,6 +240,7 @@ var operatorHandlers_1 = __importDefault(require("./operatorHandlers"));
 var calculator = document.querySelector('.calculator');
 var buttons = document.querySelector('.calculator__buttons');
 exports.display = document.querySelector('.calculator__output');
+var clearButton = document.querySelector('[data-action="clear"]');
 exports.state = {
   previousButtonType: null,
   firstValue: null,
@@ -268,6 +269,14 @@ function handleNumberInput(currentOutput, buttonValue, previousButtonType) {
   }
 }
 
+function toggleClearMode(action) {
+  if (action !== constants_1.actions.CLEAR) {
+    clearButton.textContent = 'CE';
+  } else {
+    clearButton.textContent = 'AC';
+  }
+}
+
 function handleOperator(action, currentOutput) {
   return operatorHandlers_1["default"][action](currentOutput);
 }
@@ -278,7 +287,9 @@ function buttonHandler(e) {
   if (button.matches('.calculator__button')) {
     var action = button.dataset.action;
     var buttonValue = button.textContent.trim();
-    var currentOutput = exports.display.textContent;
+    var currentOutput = exports.display.textContent; // Toggle clear button text
+
+    toggleClearMode(action);
 
     if (!action) {
       // Is number key
@@ -534,7 +545,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55747" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61904" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

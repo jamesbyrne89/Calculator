@@ -7,6 +7,7 @@ const buttons = document.querySelector('.calculator__buttons');
 export const display: HTMLElement = document.querySelector(
   '.calculator__output'
 );
+const clearButton = document.querySelector('[data-action="clear"]');
 
 export const state: IState = {
   previousButtonType: null,
@@ -33,6 +34,14 @@ function handleNumberInput(currentOutput, buttonValue, previousButtonType) {
   }
 }
 
+function toggleClearMode(action: string) {
+  if (action !== actions.CLEAR) {
+    clearButton.textContent = 'CE';
+  } else {
+    clearButton.textContent = 'AC';
+  }
+}
+
 function handleOperator(action, currentOutput) {
   return operatorHandlers[action](currentOutput);
 }
@@ -44,6 +53,9 @@ function buttonHandler(e) {
     const action: string = button.dataset.action;
     const buttonValue: string = button.textContent.trim();
     const currentOutput = display.textContent;
+
+    // Toggle clear button text
+    toggleClearMode(action);
 
     if (!action) {
       // Is number key

@@ -42,6 +42,7 @@ body {
   cursor: pointer;
   line-height: 3;
   font-size: 1.5rem;
+  text-transform: uppercase;
 }
 
 .calculator__button.right {
