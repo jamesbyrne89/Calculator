@@ -3,7 +3,7 @@ import { actions } from './constants';
 import operatorHandlers from './operatorHandlers';
 
 const calculator = document.querySelector('.calculator');
-const buttons = document.querySelector('.calculator__buttons');
+const buttons = calculator.querySelector('.calculator__buttons');
 export const display: HTMLElement = document.querySelector(
   '.calculator__output'
 );
@@ -17,7 +17,6 @@ export const state: IState = {
 };
 
 function handleNumberInput(currentOutput, buttonValue, previousButtonType) {
-  console.log({ currentOutput, buttonValue, previousButtonType, state });
   if (currentOutput === '0') {
     display.textContent = buttonValue;
     return this;
@@ -75,8 +74,12 @@ function buttonHandler(e) {
           currentOutput
         );
       }
+      if (action === actions.PERCENTAGE) {
+        display.textContent = operatorHandlers.percentage(currentOutput);
+        return;
+      }
       state.firstValue = currentOutput;
-      console.log(state);
+
       return handleOperator(action, currentOutput);
     }
   }

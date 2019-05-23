@@ -35,33 +35,30 @@ function divide() {
   state.operator = actions.DIVIDE;
 }
 
-function calculate(firstVal, operator, secondVal): string {
-  let result;
+function percentage(num: number): number {
+  return parseFloat(num) / 100;
+}
 
+function calculate(firstVal, operator, secondVal): number {
   switch (operator) {
     case actions.ADD:
-      result = parseFloat(firstVal) + parseFloat(secondVal);
-      break;
+      return parseFloat(firstVal) + parseFloat(secondVal);
     case actions.SUBTRACT:
-      result = parseFloat(firstVal) - parseFloat(secondVal);
-      break;
+      return parseFloat(firstVal) - parseFloat(secondVal);
     case actions.MULTIPLY:
-      result = parseFloat(firstVal) * parseFloat(secondVal);
-      break;
+      return parseFloat(firstVal) * parseFloat(secondVal);
     case actions.DIVIDE:
-      result = parseFloat(firstVal) / parseFloat(secondVal);
-      break;
+      return parseFloat(firstVal) / parseFloat(secondVal);
     default:
-      return '';
+      return null;
   }
-
-  return result.toString();
 }
 
 function equals(firstVal, operator, secondVal) {
   console.log('equals clicked', { firstVal, operator, secondVal });
   console.log(calculate(firstVal, operator, secondVal));
-  display.textContent = calculate(firstVal, operator, secondVal);
+  const result = calculate(firstVal, operator, secondVal);
+  display.textContent = result.toString();
 }
 
 export default {
@@ -72,5 +69,6 @@ export default {
   subtract,
   divide,
   multiply,
+  percentage,
   calculate
 };

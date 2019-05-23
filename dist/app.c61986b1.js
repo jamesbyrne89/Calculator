@@ -127,6 +127,7 @@ exports.actions = {
   MULTIPLY: 'multiply',
   DIVIDE: 'divide',
   DECIMAL: 'decimal',
+  PERCENTAGE: 'percentage',
   EQUALS: 'equals',
   CLEAR: 'clear'
 };
@@ -175,31 +176,27 @@ function divide() {
   app_1.state.operator = constants_1.actions.DIVIDE;
 }
 
-function calculate(firstVal, operator, secondVal) {
-  var result;
+function percentage(num) {
+  return parseFloat(num) / 100;
+}
 
+function calculate(firstVal, operator, secondVal) {
   switch (operator) {
     case constants_1.actions.ADD:
-      result = parseFloat(firstVal) + parseFloat(secondVal);
-      break;
+      return parseFloat(firstVal) + parseFloat(secondVal);
 
     case constants_1.actions.SUBTRACT:
-      result = parseFloat(firstVal) - parseFloat(secondVal);
-      break;
+      return parseFloat(firstVal) - parseFloat(secondVal);
 
     case constants_1.actions.MULTIPLY:
-      result = parseFloat(firstVal) * parseFloat(secondVal);
-      break;
+      return parseFloat(firstVal) * parseFloat(secondVal);
 
     case constants_1.actions.DIVIDE:
-      result = parseFloat(firstVal) / parseFloat(secondVal);
-      break;
+      return parseFloat(firstVal) / parseFloat(secondVal);
 
     default:
-      return '';
+      return null;
   }
-
-  return result.toString();
 }
 
 function equals(firstVal, operator, secondVal) {
@@ -209,7 +206,8 @@ function equals(firstVal, operator, secondVal) {
     secondVal: secondVal
   });
   console.log(calculate(firstVal, operator, secondVal));
-  app_1.display.textContent = calculate(firstVal, operator, secondVal);
+  var result = calculate(firstVal, operator, secondVal);
+  app_1.display.textContent = result.toString();
 }
 
 exports["default"] = {
@@ -220,6 +218,7 @@ exports["default"] = {
   subtract: subtract,
   divide: divide,
   multiply: multiply,
+  percentage: percentage,
   calculate: calculate
 };
 },{"./app":"app.ts","./constants":"constants.ts"}],"app.ts":[function(require,module,exports) {
@@ -238,7 +237,7 @@ var constants_1 = require("./constants");
 var operatorHandlers_1 = __importDefault(require("./operatorHandlers"));
 
 var calculator = document.querySelector('.calculator');
-var buttons = document.querySelector('.calculator__buttons');
+var buttons = calculator.querySelector('.calculator__buttons');
 exports.display = document.querySelector('.calculator__output');
 var clearButton = document.querySelector('[data-action="clear"]');
 exports.state = {
@@ -249,13 +248,6 @@ exports.state = {
 };
 
 function handleNumberInput(currentOutput, buttonValue, previousButtonType) {
-  console.log({
-    currentOutput: currentOutput,
-    buttonValue: buttonValue,
-    previousButtonType: previousButtonType,
-    state: exports.state
-  });
-
   if (currentOutput === '0') {
     exports.display.textContent = buttonValue;
     return this;
@@ -304,8 +296,12 @@ function buttonHandler(e) {
         return operatorHandlers_1["default"].equals(exports.state.firstValue, exports.state.operator, currentOutput);
       }
 
+      if (action === constants_1.actions.PERCENTAGE) {
+        exports.display.textContent = operatorHandlers_1["default"].percentage(currentOutput);
+        return;
+      }
+
       exports.state.firstValue = currentOutput;
-      console.log(exports.state);
       return handleOperator(action, currentOutput);
     }
   }
@@ -545,7 +541,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61904" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64823" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

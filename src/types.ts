@@ -29,6 +29,7 @@ export interface IActions {
   MULTIPLY: 'multiply';
   DIVIDE: 'divide';
   DECIMAL: 'decimal';
+  PERCENTAGE: 'percentage';
   EQUALS: 'equals';
   CLEAR: 'clear';
 }
