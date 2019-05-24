@@ -1,4 +1,4 @@
-import { IState } from './types';
+import { IState, IActions } from './types';
 import { actions } from './constants';
 import operatorHandlers from './operatorHandlers';
 
@@ -33,16 +33,21 @@ function handleNumberInput(currentOutput, buttonValue, previousButtonType) {
   }
 }
 
-function toggleClearMode(action: string) {
-  if (action !== actions.CLEAR) {
-    clearButton.textContent = 'CE';
-  } else {
+function toggleClearMode(action: string): void {
+  if (action === actions.CLEAR) {
     clearButton.textContent = 'AC';
+    return;
+  } else {
+    clearButton.textContent = 'CE';
   }
 }
 
 function handleOperator(action, currentOutput) {
   return operatorHandlers[action](currentOutput);
+}
+
+function isAction(actions: IActions, action: string): boolean {
+  return !action || Object.keys(actions).includes(action.toUpperCase());
 }
 
 function buttonHandler(e) {
@@ -65,7 +70,7 @@ function buttonHandler(e) {
       );
     }
     // is action key
-    if (Object.keys(actions).includes(action.toUpperCase())) {
+    if (isAction(actions, action)) {
       state.previousButtonType = 'operator';
       if (action === actions.EQUALS) {
         return operatorHandlers.equals(
@@ -75,7 +80,9 @@ function buttonHandler(e) {
         );
       }
       if (action === actions.PERCENTAGE) {
-        display.textContent = operatorHandlers.percentage(currentOutput);
+        display.textContent = operatorHandlers
+          .percentage(currentOutput)
+          .toString();
         return;
       }
       state.firstValue = currentOutput;
@@ -86,6 +93,8 @@ function buttonHandler(e) {
 }
 
 buttons.addEventListener('click', buttonHandler);
+
+class Calculator {}
 
 // (function init() {
 //   const numbers = document.getElementsByClassName('btn__number');

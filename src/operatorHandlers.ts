@@ -7,6 +7,7 @@ function decimal(currentOutput) {
   }
   if (state.previousButtonType === 'operator') {
     display.textContent = currentOutput + '.';
+    return;
   }
   display.textContent = currentOutput + '.';
 }

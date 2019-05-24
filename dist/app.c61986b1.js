@@ -147,6 +147,7 @@ function decimal(currentOutput) {
 
   if (app_1.state.previousButtonType === 'operator') {
     app_1.display.textContent = currentOutput + '.';
+    return;
   }
 
   app_1.display.textContent = currentOutput + '.';
@@ -262,15 +263,20 @@ function handleNumberInput(currentOutput, buttonValue, previousButtonType) {
 }
 
 function toggleClearMode(action) {
-  if (action !== constants_1.actions.CLEAR) {
-    clearButton.textContent = 'CE';
-  } else {
+  if (action === constants_1.actions.CLEAR) {
     clearButton.textContent = 'AC';
+    return;
+  } else {
+    clearButton.textContent = 'CE';
   }
 }
 
 function handleOperator(action, currentOutput) {
   return operatorHandlers_1["default"][action](currentOutput);
+}
+
+function isAction(actions, action) {
+  return !action || Object.keys(actions).includes(action.toUpperCase());
 }
 
 function buttonHandler(e) {
@@ -289,7 +295,7 @@ function buttonHandler(e) {
     } // is action key
 
 
-    if (Object.keys(constants_1.actions).includes(action.toUpperCase())) {
+    if (isAction(constants_1.actions, action)) {
       exports.state.previousButtonType = 'operator';
 
       if (action === constants_1.actions.EQUALS) {
@@ -297,7 +303,7 @@ function buttonHandler(e) {
       }
 
       if (action === constants_1.actions.PERCENTAGE) {
-        exports.display.textContent = operatorHandlers_1["default"].percentage(currentOutput);
+        exports.display.textContent = operatorHandlers_1["default"].percentage(currentOutput).toString();
         return;
       }
 
@@ -307,7 +313,15 @@ function buttonHandler(e) {
   }
 }
 
-buttons.addEventListener('click', buttonHandler); // (function init() {
+buttons.addEventListener('click', buttonHandler);
+
+var Calculator =
+/** @class */
+function () {
+  function Calculator() {}
+
+  return Calculator;
+}(); // (function init() {
 //   const numbers = document.getElementsByClassName('btn__number');
 //   const equalsBtn = document.getElementById('equals');
 //   const ac = document.getElementById('ac');
@@ -541,7 +555,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64823" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57224" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
