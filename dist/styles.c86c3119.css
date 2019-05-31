@@ -5,7 +5,9 @@ body {
   font-family: 'roboto', arial, sans-serif;
   font-size: 1.5rem;
   min-height: 100vh;
-  background-color: #fff; }
+  background-color: #fff;
+  margin: 0;
+  padding: 0; }
 
 .calculator {
   width: 400px;
@@ -71,4 +73,4 @@ body {
   min-height: 95px; }
 
 
-/*# sourceMappingURL=/styles.164d45a1.css.map */
+/*# sourceMappingURL=/styles.c86c3119.css.map */

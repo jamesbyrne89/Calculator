@@ -1,4 +1,4 @@
-import { IActions } from './types';
+import { IActions } from './types/index';
 
 export const actions: IActions = {
   ADD: 'add',

@@ -177,11 +177,15 @@ function divide() {
   app_1.state.operator = constants_1.actions.DIVIDE;
 }
 
-function percentage(num) {
-  return parseFloat(num) / 100;
+function percentage(input) {
+  return parseFloat(input) / 100;
 }
 
-function calculate(firstVal, operator, secondVal) {
+function calculate(_a) {
+  var firstVal = _a.firstVal,
+      operator = _a.operator,
+      secondVal = _a.secondVal;
+
   switch (operator) {
     case constants_1.actions.ADD:
       return parseFloat(firstVal) + parseFloat(secondVal);
@@ -196,19 +200,21 @@ function calculate(firstVal, operator, secondVal) {
       return parseFloat(firstVal) / parseFloat(secondVal);
 
     default:
-      return null;
+      return 0;
   }
 }
 
 function equals(firstVal, operator, secondVal) {
-  console.log('equals clicked', {
+  var result = calculate({
     firstVal: firstVal,
     operator: operator,
     secondVal: secondVal
   });
-  console.log(calculate(firstVal, operator, secondVal));
-  var result = calculate(firstVal, operator, secondVal);
   app_1.display.textContent = result.toString();
+  app_1.state.firstValue = null;
+  app_1.state.operator = null;
+  app_1.state.secondValue = null;
+  app_1.state.previousButtonType = null;
 }
 
 exports["default"] = {
@@ -555,7 +561,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57224" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60203" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -12,6 +12,8 @@ function decimal(currentOutput) {
   display.textContent = currentOutput + '.';
 }
 
+function clear
+
 function clear() {
   display.textContent = '0';
   state.firstValue = null;
@@ -36,11 +38,11 @@ function divide() {
   state.operator = actions.DIVIDE;
 }
 
-function percentage(num: number): number {
-  return parseFloat(num) / 100;
+function percentage(input: string): number {
+  return parseFloat(input) / 100;
 }
 
-function calculate(firstVal, operator, secondVal): number {
+function calculate({ firstVal, operator, secondVal }): number {
   switch (operator) {
     case actions.ADD:
       return parseFloat(firstVal) + parseFloat(secondVal);
@@ -51,15 +53,17 @@ function calculate(firstVal, operator, secondVal): number {
     case actions.DIVIDE:
       return parseFloat(firstVal) / parseFloat(secondVal);
     default:
-      return null;
+      return 0;
   }
 }
 
 function equals(firstVal, operator, secondVal) {
-  console.log('equals clicked', { firstVal, operator, secondVal });
-  console.log(calculate(firstVal, operator, secondVal));
-  const result = calculate(firstVal, operator, secondVal);
+  const result = calculate({ firstVal, operator, secondVal });
   display.textContent = result.toString();
+  state.firstValue = null;
+  state.operator = null;
+  state.secondValue = null;
+  state.previousButtonType = null;
 }
 
 export default {

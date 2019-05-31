@@ -6,6 +6,8 @@ body {
   font-size: 1.5rem;
   min-height: 100vh;
   background-color: #fff;
+  margin: 0;
+  padding: 0;
 }
 
 .calculator {
@@ -14,6 +16,8 @@ body {
 }
 
 .calculator__screen {
+  font-size: 4.5rem;
+  line-height: 1;
   position: relative;
   background-color: #fff;
   text-align: right;
