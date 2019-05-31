@@ -14,6 +14,7 @@ function decimal(currentOutput) {
 }
 
 function clear() {
+  console.log('clear');
   display.textContent = '0';
   state.firstValue = null;
   state.operator = null;
@@ -38,6 +39,7 @@ function divide() {
 }
 
 function percentage(input: string): number {
+  console.log(input);
   return parseFloat(input) / 100;
 }
 

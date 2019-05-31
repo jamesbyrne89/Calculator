@@ -156,6 +156,7 @@ function decimal(currentOutput) {
 }
 
 function clear() {
+  console.log('clear');
   app_1.display.textContent = '0';
   app_1.state.firstValue = null;
   app_1.state.operator = null;
@@ -180,6 +181,7 @@ function divide() {
 }
 
 function percentage(input) {
+  console.log(input);
   return parseFloat(input) / 100;
 }
 
@@ -245,8 +247,7 @@ var constants_1 = require("./constants");
 
 var operatorHandlers_1 = __importDefault(require("./operatorHandlers"));
 
-var calculator = document.querySelector('.calculator');
-var buttons = calculator.querySelector('.calculator__buttons');
+var buttons = document.querySelector('.calculator__buttons');
 exports.display = document.querySelector('.calculator__output');
 var clearButton = document.querySelector('[data-action="clear"]');
 exports.state = {
@@ -256,33 +257,63 @@ exports.state = {
   operator: null
 };
 
-function handleNumberWithDecimal(buttonValue) {}
+function setDisplayOutput(value) {
+  exports.display.textContent = value;
+}
+
+exports.setDisplayOutput = setDisplayOutput;
 
 function hasDecimal(str) {
-  var regex = /\.+/;
+  var regex = /\./g;
   return regex.test(str);
 }
 
 exports.hasDecimal = hasDecimal;
 
-function handleNumberInput(currentOutput, buttonValue, previousButtonType) {
-  console.log(currentOutput, exports.state);
+function setFirstValue(value) {
+  exports.state.firstValue = value;
+}
 
-  if (currentOutput === '0') {
-    exports.display.textContent = buttonValue;
-    return this;
-  }
+function setSecondValue(value) {
+  exports.state.secondValue = value;
+}
 
+function isFirstValue() {
+  return exports.state.firstValue === null;
+}
+
+function isStartOfFirstValue(currentOutput) {
+  return isFirstValue() || currentOutput === '0';
+}
+
+function isSecondValue() {
+  return exports.state.firstValue && exports.state.previousButtonType === 'operator' && exports.state.secondValue === null;
+}
+
+function handleNumberInput(currentOutput, buttonValue) {
   if (hasDecimal(currentOutput) && exports.state.operator === null) {
-    exports.display.textContent = currentOutput + buttonValue;
+    setDisplayOutput(currentOutput + buttonValue);
     return this;
   }
 
-  if (exports.state.firstValue && previousButtonType === 'operator' && exports.state.secondValue === null) {
-    exports.display.textContent = buttonValue;
-    exports.state.secondValue = exports.display.textContent;
+  if (isStartOfFirstValue(currentOutput)) {
+    setDisplayOutput(buttonValue);
+    setFirstValue(buttonValue);
+    return this;
+  }
+
+  if (isFirstValue()) {
+    setDisplayOutput(exports.display.textContent + buttonValue);
+    setFirstValue(exports.display.textContent + buttonValue);
+    return this;
+  } // Set second value
+
+
+  if (isSecondValue()) {
+    setSecondValue(currentOutput);
+    setDisplayOutput(buttonValue);
   } else {
-    exports.display.textContent += buttonValue;
+    setDisplayOutput(exports.display.textContent + buttonValue);
   }
 
   return this;
@@ -291,7 +322,6 @@ function handleNumberInput(currentOutput, buttonValue, previousButtonType) {
 function toggleClearMode(action) {
   if (action === constants_1.actions.CLEAR) {
     clearButton.textContent = 'AC';
-    return;
   } else {
     clearButton.textContent = 'CE';
   }
@@ -307,6 +337,9 @@ function isAction(actions, action) {
 
 function buttonHandler(e) {
   var button = e.target;
+  console.log({
+    state: exports.state
+  });
 
   if (button.matches('.calculator__button')) {
     var action = button.dataset.action;
@@ -317,7 +350,7 @@ function buttonHandler(e) {
 
     if (!action) {
       // Is number key
-      return handleNumberInput(currentOutput, buttonValue, exports.state.previousButtonType);
+      return handleNumberInput(currentOutput, buttonValue);
     } // is action key
 
 
@@ -329,11 +362,11 @@ function buttonHandler(e) {
       }
 
       if (action === constants_1.actions.PERCENTAGE) {
-        exports.display.textContent = operatorHandlers_1["default"].percentage(currentOutput).toString();
+        setDisplayOutput(operatorHandlers_1["default"].percentage(currentOutput).toString());
         return;
       }
 
-      exports.state.firstValue = currentOutput;
+      setFirstValue(currentOutput);
       return handleOperator(action, currentOutput);
     }
   }
@@ -368,7 +401,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51385" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54426" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

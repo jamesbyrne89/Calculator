@@ -16,30 +16,62 @@ export const state: IState = {
   operator: null
 };
 
+export function setDisplayOutput(value: string): void {
+  display.textContent = value;
+}
+
 export function hasDecimal(str: string): boolean {
   const regex = /\./g;
   return regex.test(str);
 }
 
-function handleNumberInput(currentOutput, buttonValue, previousButtonType) {
-  console.log(currentOutput, state);
-  if (currentOutput === '0') {
-    display.textContent = buttonValue;
-    return this;
-  }
-  if (hasDecimal(currentOutput) && state.operator === null) {
-    display.textContent = currentOutput + buttonValue;
-    return this;
-  }
-  if (
+function setFirstValue(value: string): void {
+  state.firstValue = value;
+}
+
+function setSecondValue(value: string): void {
+  state.secondValue = value;
+}
+
+function isFirstValue(): boolean {
+  return state.firstValue === null;
+}
+
+function isStartOfFirstValue(currentOutput: string): boolean {
+  return isFirstValue() || currentOutput === '0';
+}
+
+function isSecondValue(): boolean {
+  return (
     state.firstValue &&
-    previousButtonType === 'operator' &&
+    state.previousButtonType === 'operator' &&
     state.secondValue === null
-  ) {
-    display.textContent = buttonValue;
-    state.secondValue = display.textContent;
+  );
+}
+
+function handleNumberInput(currentOutput, buttonValue) {
+  if (hasDecimal(currentOutput) && state.operator === null) {
+    setDisplayOutput(currentOutput + buttonValue);
+    return this;
+  }
+  if (isStartOfFirstValue(currentOutput)) {
+    setDisplayOutput(buttonValue);
+    setFirstValue(buttonValue);
+    return this;
+  }
+
+  if (isFirstValue()) {
+    setDisplayOutput(display.textContent + buttonValue);
+    setFirstValue(display.textContent + buttonValue);
+    return this;
+  }
+
+  // Set second value
+  if (isSecondValue()) {
+    setSecondValue(currentOutput);
+    setDisplayOutput(buttonValue);
   } else {
-    display.textContent += buttonValue;
+    setDisplayOutput(display.textContent + buttonValue);
   }
   return this;
 }
@@ -62,9 +94,9 @@ function isAction(actions: IActions, action: string): boolean {
 
 function buttonHandler(e) {
   const button: HTMLElement = e.target;
-
+  console.log({ state });
   if (button.matches('.calculator__button')) {
-    const action: string = button.dataset.action;
+    const { action } = button.dataset;
     const buttonValue: string = button.textContent.trim();
     const currentOutput = display.textContent;
 
@@ -73,11 +105,7 @@ function buttonHandler(e) {
 
     if (!action) {
       // Is number key
-      return handleNumberInput(
-        currentOutput,
-        buttonValue,
-        state.previousButtonType
-      );
+      return handleNumberInput(currentOutput, buttonValue);
     }
     // is action key
     if (isAction(actions, action)) {
@@ -90,12 +118,10 @@ function buttonHandler(e) {
         );
       }
       if (action === actions.PERCENTAGE) {
-        display.textContent = operatorHandlers
-          .percentage(currentOutput)
-          .toString();
+        setDisplayOutput(operatorHandlers.percentage(currentOutput).toString());
         return;
       }
-      state.firstValue = currentOutput;
+      setFirstValue(currentOutput);
 
       return handleOperator(action, currentOutput);
     }
