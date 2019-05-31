@@ -1,53 +1,73 @@
-<!doctype html>
-<html class="no-js" lang="">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>Simple Calculator</title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Simple Calculator</title>
+    <meta name="description" content="A simple calculator built in plain Typescript">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.c86c3119.css">
+    <link href="/favicon-32x32.7d369b0f.png" rel="icon" sizes="32x32" type="image/png">
 
-        <link rel="apple-touch-icon" href="apple-touch-icon.png">
-        <!-- Place favicon.ico in the root directory -->
-        <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400" rel="stylesheet">
-        <link rel="stylesheet" href="css/normalize.css">
-          <link rel="stylesheet" href="assets/styles/styles-b12eb439fc.css"/>
-        <link href="/assets/images/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png">
-        <link href="/assets/images/favicon-16x16.png" rel="icon" sizes="16x16" type="image/png">
-        <link rel="apple-touch-icon" href="/assets/images/favicon-167x167.png">        
-        <script src="js/vendor/modernizr-2.8.3.min.js"></script>
-    </head>
-    <body>
+    <meta name="theme-color" content="#fafafa">
+  <script src="/styles.c86c3119.js"></script></head>
 
-        <section class="calculator">
-        
-            <div id="screen" class="screen">
-            <div class="screen-content-wrapper">
-                    <div class="input" id="input"></div>
-                    <div class="output" id="output"></div>
-            </div>
-            </div>
-            <div id="ac" class="button top">ac</div>
-            <div id="plus-minus" class="button operator top">+/-</div>
-            <div id="percentage" class="button top">%</div>
-            <div id="divide" class="button right">/</div>
-            <div id="one" class="button literal btn__number">1</div>
-            <div id="two" class="button literal btn__number">2</div>
-            <div id="three" class="button literal btn__number">3</div>
-            <div id="multiply" class="button operator right">X</div>
-            <div id="four" class="button literal btn__number">4</div>
-            <div id="five" class="button literal btn__number">5</div>
-            <div id="six" class="button literal btn__number">6</div>
-            <div id="minus" class="button literal operator right">-</div>
-            <div id="seven" class="button literal btn__number">7</div>
-            <div id="eight" class="button literal btn__number">8</div>
-            <div id="nine" class="button literal btn__number">9</div>
-            <div id="plus" class="button operator right">+</div>
-            <div id="zero" class="button literal btn__number">0</div>
-            <div id="decimal" class="button operator">.</div>
-            <div id="equals" class="button btn__equals">=</div>
-        </section>
-
-    <script src="assets/scripts/app-d443002204.js"></script>
-    </body>
+  <body>
+    <article class="calculator">
+      <div id="screen" class="calculator__screen">
+        <div class="screen-content-wrapper">
+          <div class="input" id="input"></div>
+          <div class="calculator__output" id="output">0</div>
+        </div>
+      </div>
+      <section class="calculator__buttons">
+        <button id="ac" data-action="clear" class="calculator__button top">
+          ac
+        </button>
+        <button id="plus-minus" data-action="plus-minus" class="calculator__button top">
+          +/-
+        </button>
+        <button id="percentage" data-action="percentage" class="calculator__button top">
+          %
+        </button>
+        <button id="divide" data-action="divide" class="calculator__button right">
+          /
+        </button>
+        <button id="one" class="calculator__button btn__number">1</button>
+        <button id="two" class="calculator__button btn__number">2</button>
+        <button id="three" class="calculator__button btn__number">3</button>
+        <button id="multiply" data-action="multiply" class="calculator__button operator right">
+          X
+        </button>
+        <button id="four" class="calculator__button btn__number">4</button>
+        <button id="five" class="calculator__button btn__number">5</button>
+        <button id="six" class="calculator__button btn__number">6</button>
+        <button id="subtract" data-action="subtract" class="calculator__button operator right">
+          -
+        </button>
+        <button id="seven" class="calculator__button literal btn__number">
+          7
+        </button>
+        <button id="eight" class="calculator__button literal btn__number">
+          8
+        </button>
+        <button id="nine" class="calculator__button literal btn__number">
+          9
+        </button>
+        <button id="add" data-action="add" class="calculator__button operator right">
+          +
+        </button>
+        <button id="zero" class="calculator__button literal btn__number">
+          0
+        </button>
+        <button id="decimal" data-action="decimal" class="calculator__button operator">
+          .
+        </button>
+        <button id="equals" data-action="equals" class="calculator__button btn__equals">
+          =
+        </button>
+      </section>
+    </article>
+  </body>
+  <script src="/app.c61986b1.js"></script>
 </html>

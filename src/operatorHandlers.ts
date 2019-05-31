@@ -64,7 +64,6 @@ function equals(firstVal, operator, secondVal) {
   state.secondValue = null;
   state.previousButtonType = null;
 }
-
 export default {
   decimal,
   clear,

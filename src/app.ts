@@ -2,8 +2,8 @@ import { IState, IActions } from './types';
 import { actions } from './constants';
 import operatorHandlers from './operatorHandlers';
 
-const calculator = document.querySelector('.calculator');
-const buttons = calculator.querySelector('.calculator__buttons');
+const buttons = document.querySelector('.calculator__buttons');
+
 export const display: HTMLElement = document.querySelector(
   '.calculator__output'
 );
@@ -16,10 +16,8 @@ export const state: IState = {
   operator: null
 };
 
-function handleNumberWithDecimal(buttonValue) {}
-
-function hasDecimal(str: string): boolean {
-  const regex = /\.+/;
+export function hasDecimal(str: string): boolean {
+  const regex = /\./g;
   return regex.test(str);
 }
 
@@ -49,7 +47,6 @@ function handleNumberInput(currentOutput, buttonValue, previousButtonType) {
 function toggleClearMode(action: string): void {
   if (action === actions.CLEAR) {
     clearButton.textContent = 'AC';
-    return;
   } else {
     clearButton.textContent = 'CE';
   }

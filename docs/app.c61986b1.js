@@ -117,79 +117,230 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"../node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
-var bundleURL = null;
+})({"constants.ts":[function(require,module,exports) {
+"use strict";
 
-function getBundleURLCached() {
-  if (!bundleURL) {
-    bundleURL = getBundleURL();
-  }
+exports.__esModule = true;
+exports.actions = {
+  ADD: 'add',
+  SUBTRACT: 'subtract',
+  MULTIPLY: 'multiply',
+  DIVIDE: 'divide',
+  DECIMAL: 'decimal',
+  PERCENTAGE: 'percentage',
+  EQUALS: 'equals',
+  CLEAR: 'clear'
+};
+},{}],"operatorHandlers.ts":[function(require,module,exports) {
+"use strict";
 
-  return bundleURL;
-}
+exports.__esModule = true;
 
-function getBundleURL() {
-  // Attempt to find the URL of the current script and use that as the base URL
-  try {
-    throw new Error();
-  } catch (err) {
-    var matches = ('' + err.stack).match(/(https?|file|ftp|chrome-extension|moz-extension):\/\/[^)\n]+/g);
+var app_1 = require("./app");
 
-    if (matches) {
-      return getBaseURL(matches[0]);
-    }
-  }
+var constants_1 = require("./constants");
 
-  return '/';
-}
+function decimal(currentOutput) {
+  console.log(currentOutput);
 
-function getBaseURL(url) {
-  return ('' + url).replace(/^((?:https?|file|ftp|chrome-extension|moz-extension):\/\/.+)\/[^/]+$/, '$1') + '/';
-}
-
-exports.getBundleURL = getBundleURLCached;
-exports.getBaseURL = getBaseURL;
-},{}],"../node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
-var bundle = require('./bundle-url');
-
-function updateLink(link) {
-  var newLink = link.cloneNode();
-
-  newLink.onload = function () {
-    link.remove();
-  };
-
-  newLink.href = link.href.split('?')[0] + '?' + Date.now();
-  link.parentNode.insertBefore(newLink, link.nextSibling);
-}
-
-var cssTimeout = null;
-
-function reloadCSS() {
-  if (cssTimeout) {
+  if (currentOutput.includes('.')) {
     return;
   }
 
-  cssTimeout = setTimeout(function () {
-    var links = document.querySelectorAll('link[rel="stylesheet"]');
+  if (app_1.state.previousButtonType === 'operator') {
+    app_1.display.textContent = currentOutput + '.';
+    return;
+  }
 
-    for (var i = 0; i < links.length; i++) {
-      if (bundle.getBaseURL(links[i].href) === bundle.getBundleURL()) {
-        updateLink(links[i]);
-      }
-    }
-
-    cssTimeout = null;
-  }, 50);
+  app_1.display.textContent = currentOutput + '.';
 }
 
-module.exports = reloadCSS;
-},{"./bundle-url":"../node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"styles/styles.scss":[function(require,module,exports) {
-var reloadCSS = require('_css_loader');
+function clear() {
+  app_1.display.textContent = '0';
+  app_1.state.firstValue = null;
+  app_1.state.operator = null;
+  app_1.state.secondValue = null;
+  app_1.state.previousButtonType = null;
+}
 
-module.hot.dispose(reloadCSS);
-module.hot.accept(reloadCSS);
-},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+function add() {
+  app_1.state.operator = constants_1.actions.ADD;
+}
+
+function subtract() {
+  app_1.state.operator = constants_1.actions.SUBTRACT;
+}
+
+function multiply() {
+  app_1.state.operator = constants_1.actions.MULTIPLY;
+}
+
+function divide() {
+  app_1.state.operator = constants_1.actions.DIVIDE;
+}
+
+function percentage(input) {
+  return parseFloat(input) / 100;
+}
+
+function calculate(_a) {
+  var firstVal = _a.firstVal,
+      operator = _a.operator,
+      secondVal = _a.secondVal;
+
+  switch (operator) {
+    case constants_1.actions.ADD:
+      return parseFloat(firstVal) + parseFloat(secondVal);
+
+    case constants_1.actions.SUBTRACT:
+      return parseFloat(firstVal) - parseFloat(secondVal);
+
+    case constants_1.actions.MULTIPLY:
+      return parseFloat(firstVal) * parseFloat(secondVal);
+
+    case constants_1.actions.DIVIDE:
+      return parseFloat(firstVal) / parseFloat(secondVal);
+
+    default:
+      return 0;
+  }
+}
+
+function equals(firstVal, operator, secondVal) {
+  var result = calculate({
+    firstVal: firstVal,
+    operator: operator,
+    secondVal: secondVal
+  });
+  app_1.display.textContent = result.toString();
+  app_1.state.firstValue = null;
+  app_1.state.operator = null;
+  app_1.state.secondValue = null;
+  app_1.state.previousButtonType = null;
+}
+
+exports["default"] = {
+  decimal: decimal,
+  clear: clear,
+  equals: equals,
+  add: add,
+  subtract: subtract,
+  divide: divide,
+  multiply: multiply,
+  percentage: percentage,
+  calculate: calculate
+};
+},{"./app":"app.ts","./constants":"constants.ts"}],"app.ts":[function(require,module,exports) {
+"use strict";
+
+var __importDefault = this && this.__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+
+exports.__esModule = true;
+
+var constants_1 = require("./constants");
+
+var operatorHandlers_1 = __importDefault(require("./operatorHandlers"));
+
+var calculator = document.querySelector('.calculator');
+var buttons = calculator.querySelector('.calculator__buttons');
+exports.display = document.querySelector('.calculator__output');
+var clearButton = document.querySelector('[data-action="clear"]');
+exports.state = {
+  previousButtonType: null,
+  firstValue: null,
+  secondValue: null,
+  operator: null
+};
+
+function handleNumberWithDecimal(buttonValue) {}
+
+function hasDecimal(str) {
+  var regex = /\.+/;
+  return regex.test(str);
+}
+
+exports.hasDecimal = hasDecimal;
+
+function handleNumberInput(currentOutput, buttonValue, previousButtonType) {
+  console.log(currentOutput, exports.state);
+
+  if (currentOutput === '0') {
+    exports.display.textContent = buttonValue;
+    return this;
+  }
+
+  if (hasDecimal(currentOutput) && exports.state.operator === null) {
+    exports.display.textContent = currentOutput + buttonValue;
+    return this;
+  }
+
+  if (exports.state.firstValue && previousButtonType === 'operator' && exports.state.secondValue === null) {
+    exports.display.textContent = buttonValue;
+    exports.state.secondValue = exports.display.textContent;
+  } else {
+    exports.display.textContent += buttonValue;
+  }
+
+  return this;
+}
+
+function toggleClearMode(action) {
+  if (action === constants_1.actions.CLEAR) {
+    clearButton.textContent = 'AC';
+    return;
+  } else {
+    clearButton.textContent = 'CE';
+  }
+}
+
+function handleOperator(action, currentOutput) {
+  return operatorHandlers_1["default"][action](currentOutput);
+}
+
+function isAction(actions, action) {
+  return !action || Object.keys(actions).includes(action.toUpperCase());
+}
+
+function buttonHandler(e) {
+  var button = e.target;
+
+  if (button.matches('.calculator__button')) {
+    var action = button.dataset.action;
+    var buttonValue = button.textContent.trim();
+    var currentOutput = exports.display.textContent; // Toggle clear button text
+
+    toggleClearMode(action);
+
+    if (!action) {
+      // Is number key
+      return handleNumberInput(currentOutput, buttonValue, exports.state.previousButtonType);
+    } // is action key
+
+
+    if (isAction(constants_1.actions, action)) {
+      exports.state.previousButtonType = 'operator';
+
+      if (action === constants_1.actions.EQUALS) {
+        return operatorHandlers_1["default"].equals(exports.state.firstValue, exports.state.operator, currentOutput);
+      }
+
+      if (action === constants_1.actions.PERCENTAGE) {
+        exports.display.textContent = operatorHandlers_1["default"].percentage(currentOutput).toString();
+        return;
+      }
+
+      exports.state.firstValue = currentOutput;
+      return handleOperator(action, currentOutput);
+    }
+  }
+}
+
+buttons.addEventListener('click', buttonHandler);
+},{"./constants":"constants.ts","./operatorHandlers":"operatorHandlers.ts"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -217,7 +368,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51323" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51385" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
@@ -392,5 +543,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["../node_modules/parcel-bundler/src/builtins/hmr-runtime.js"], null)
-//# sourceMappingURL=/styles.c86c3119.js.map
+},{}]},{},["../node_modules/parcel-bundler/src/builtins/hmr-runtime.js","app.ts"], null)
+//# sourceMappingURL=/app.c61986b1.js.map

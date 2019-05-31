@@ -33,7 +33,6 @@ export interface IActions {
   EQUALS: 'equals';
   CLEAR: 'clear';
 }
-
 export interface IState {
   previousButtonType: 'operator' | 'number';
   firstValue: string;
