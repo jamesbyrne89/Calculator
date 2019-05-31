@@ -2,6 +2,7 @@ import { display, state } from './app';
 import { actions } from './constants';
 
 function decimal(currentOutput) {
+  console.log(currentOutput);
   if (currentOutput.includes('.')) {
     return;
   }
@@ -11,8 +12,6 @@ function decimal(currentOutput) {
   }
   display.textContent = currentOutput + '.';
 }
-
-function clear
 
 function clear() {
   display.textContent = '0';
