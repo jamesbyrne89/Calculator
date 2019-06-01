@@ -120,7 +120,9 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 })({"constants.ts":[function(require,module,exports) {
 "use strict";
 
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 exports.actions = {
   ADD: 'add',
   SUBTRACT: 'subtract',
@@ -134,7 +136,9 @@ exports.actions = {
 },{}],"operatorHandlers.ts":[function(require,module,exports) {
 "use strict";
 
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
 var app_1 = require("./app");
 
@@ -147,7 +151,7 @@ function decimal(currentOutput) {
     return;
   }
 
-  if (app_1.state.previousButtonType === 'operator') {
+  if (app_1.calculator.getState.previousButtonType === 'operator') {
     app_1.display.textContent = currentOutput + '.';
     return;
   }
@@ -158,26 +162,42 @@ function decimal(currentOutput) {
 function clear() {
   console.log('clear');
   app_1.display.textContent = '0';
-  app_1.state.firstValue = null;
-  app_1.state.operator = null;
-  app_1.state.secondValue = null;
-  app_1.state.previousButtonType = null;
+  app_1.calculator.setState = {
+    firstValue: null
+  };
+  app_1.calculator.setState = {
+    operator: null
+  };
+  app_1.calculator.setState = {
+    secondValue: null
+  };
+  app_1.calculator.setState = {
+    previousButtonType: null
+  };
 }
 
 function add() {
-  app_1.state.operator = constants_1.actions.ADD;
+  app_1.calculator.setState = {
+    operator: constants_1.actions.ADD
+  };
 }
 
 function subtract() {
-  app_1.state.operator = constants_1.actions.SUBTRACT;
+  app_1.calculator.setState = {
+    operator: constants_1.actions.SUBTRACT
+  };
 }
 
 function multiply() {
-  app_1.state.operator = constants_1.actions.MULTIPLY;
+  app_1.calculator.setState = {
+    operator: constants_1.actions.MULTIPLY
+  };
 }
 
 function divide() {
-  app_1.state.operator = constants_1.actions.DIVIDE;
+  app_1.calculator.setState = {
+    operator: constants_1.actions.DIVIDE
+  };
 }
 
 function percentage(input) {
@@ -215,13 +235,21 @@ function equals(firstVal, operator, secondVal) {
     secondVal: secondVal
   });
   app_1.display.textContent = result.toString();
-  app_1.state.firstValue = null;
-  app_1.state.operator = null;
-  app_1.state.secondValue = null;
-  app_1.state.previousButtonType = null;
+  app_1.calculator.setState = {
+    firstValue: null
+  };
+  app_1.calculator.setState = {
+    operator: null
+  };
+  app_1.calculator.setState = {
+    secondValue: null
+  };
+  app_1.calculator.setState = {
+    previousButtonType: null
+  };
 }
 
-exports["default"] = {
+exports.default = {
   decimal: decimal,
   clear: clear,
   equals: equals,
@@ -241,27 +269,80 @@ var __importDefault = this && this.__importDefault || function (mod) {
   };
 };
 
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
 var constants_1 = require("./constants");
 
 var operatorHandlers_1 = __importDefault(require("./operatorHandlers"));
 
-var buttons = document.querySelector('.calculator__buttons');
 exports.display = document.querySelector('.calculator__output');
 var clearButton = document.querySelector('[data-action="clear"]');
-exports.state = {
-  previousButtonType: null,
-  firstValue: null,
-  secondValue: null,
-  operator: null
-};
 
-function setDisplayOutput(value) {
-  exports.display.textContent = value;
-}
+var Calculator =
+/** @class */
+function () {
+  function Calculator() {
+    this.state = {
+      previousButtonType: null,
+      firstValue: null,
+      secondValue: null,
+      operator: null
+    };
+    this.buttonElements = document.querySelector('.calculator__buttons');
+    this.displayOutput = '0';
+  }
 
-exports.setDisplayOutput = setDisplayOutput;
+  Object.defineProperty(Calculator.prototype, "buttons", {
+    get: function get() {
+      return this.buttonElements;
+    },
+    enumerable: true,
+    configurable: true
+  });
+  Object.defineProperty(Calculator.prototype, "getState", {
+    get: function get() {
+      return this.state;
+    },
+    enumerable: true,
+    configurable: true
+  });
+  Object.defineProperty(Calculator.prototype, "setState", {
+    set: function set(newState) {
+      this.state = Object.assign(this.state, newState);
+    },
+    enumerable: true,
+    configurable: true
+  });
+  Object.defineProperty(Calculator.prototype, "setFirstValue", {
+    set: function set(value) {
+      this.setState = {
+        firstValue: value
+      };
+    },
+    enumerable: true,
+    configurable: true
+  });
+  Object.defineProperty(Calculator.prototype, "setSecondValue", {
+    set: function set(value) {
+      this.setState = {
+        secondValue: value
+      };
+    },
+    enumerable: true,
+    configurable: true
+  });
+  Object.defineProperty(Calculator.prototype, "setDisplayOutput", {
+    set: function set(value) {
+      this.displayOutput = value;
+      exports.display.textContent = this.displayOutput;
+    },
+    enumerable: true,
+    configurable: true
+  });
+  return Calculator;
+}();
 
 function hasDecimal(str) {
   var regex = /\./g;
@@ -270,16 +351,8 @@ function hasDecimal(str) {
 
 exports.hasDecimal = hasDecimal;
 
-function setFirstValue(value) {
-  exports.state.firstValue = value;
-}
-
-function setSecondValue(value) {
-  exports.state.secondValue = value;
-}
-
 function isFirstValue() {
-  return exports.state.firstValue === null;
+  return exports.calculator.getState.firstValue === null;
 }
 
 function isStartOfFirstValue(currentOutput) {
@@ -287,23 +360,23 @@ function isStartOfFirstValue(currentOutput) {
 }
 
 function isSecondValue() {
-  return exports.state.firstValue && exports.state.previousButtonType === 'operator' && exports.state.secondValue === null;
+  return exports.calculator.getState.firstValue && exports.calculator.getState.previousButtonType === 'operator' && exports.calculator.getState.secondValue === null;
 }
 
 function handleNumberInput(currentOutput, buttonValue) {
-  if (hasDecimal(currentOutput) && exports.state.operator === null) {
-    setDisplayOutput(currentOutput + buttonValue);
+  if (hasDecimal(currentOutput) && exports.calculator.getState.operator === null) {
+    exports.calculator.setDisplayOutput = currentOutput + buttonValue;
     return this;
   }
 
   if (isStartOfFirstValue(currentOutput)) {
-    setDisplayOutput(buttonValue);
+    exports.calculator.setDisplayOutput = buttonValue;
     setFirstValue(buttonValue);
     return this;
   }
 
   if (isFirstValue()) {
-    setDisplayOutput(exports.display.textContent + buttonValue);
+    exports.calculator.setDisplayOutput = exports.display.textContent + buttonValue;
     setFirstValue(exports.display.textContent + buttonValue);
     return this;
   } // Set second value
@@ -311,9 +384,9 @@ function handleNumberInput(currentOutput, buttonValue) {
 
   if (isSecondValue()) {
     setSecondValue(currentOutput);
-    setDisplayOutput(buttonValue);
+    exports.calculator.setDisplayOutput = buttonValue;
   } else {
-    setDisplayOutput(exports.display.textContent + buttonValue);
+    exports.calculator.setDisplayOutput = exports.display.textContent + buttonValue;
   }
 
   return this;
@@ -328,7 +401,7 @@ function toggleClearMode(action) {
 }
 
 function handleOperator(action, currentOutput) {
-  return operatorHandlers_1["default"][action](currentOutput);
+  return operatorHandlers_1.default[action](currentOutput);
 }
 
 function isAction(actions, action) {
@@ -337,9 +410,6 @@ function isAction(actions, action) {
 
 function buttonHandler(e) {
   var button = e.target;
-  console.log({
-    state: exports.state
-  });
 
   if (button.matches('.calculator__button')) {
     var action = button.dataset.action;
@@ -355,14 +425,16 @@ function buttonHandler(e) {
 
 
     if (isAction(constants_1.actions, action)) {
-      exports.state.previousButtonType = 'operator';
+      exports.calculator.setState = {
+        previousButtonType: 'operator'
+      };
 
       if (action === constants_1.actions.EQUALS) {
-        return operatorHandlers_1["default"].equals(exports.state.firstValue, exports.state.operator, currentOutput);
+        return operatorHandlers_1.default.equals(exports.calculator.getState.firstValue, exports.calculator.getState.operator, currentOutput);
       }
 
       if (action === constants_1.actions.PERCENTAGE) {
-        setDisplayOutput(operatorHandlers_1["default"].percentage(currentOutput).toString());
+        exports.calculator.setDisplayOutput = operatorHandlers_1.default.percentage(currentOutput).toString();
         return;
       }
 
@@ -372,7 +444,8 @@ function buttonHandler(e) {
   }
 }
 
-buttons.addEventListener('click', buttonHandler);
+exports.calculator = new Calculator();
+exports.calculator.buttons.addEventListener('click', buttonHandler);
 },{"./constants":"constants.ts","./operatorHandlers":"operatorHandlers.ts"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -401,7 +474,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54426" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49272" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

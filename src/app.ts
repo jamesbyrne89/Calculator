@@ -2,22 +2,46 @@ import { IState, IActions } from './types';
 import { actions } from './constants';
 import operatorHandlers from './operatorHandlers';
 
-const buttons = document.querySelector('.calculator__buttons');
-
 export const display: HTMLElement = document.querySelector(
   '.calculator__output'
 );
 const clearButton = document.querySelector('[data-action="clear"]');
 
-export const state: IState = {
-  previousButtonType: null,
-  firstValue: null,
-  secondValue: null,
-  operator: null
-};
+class Calculator {
+  private state = {
+    previousButtonType: null,
+    firstValue: null,
+    secondValue: null,
+    operator: null
+  };
 
-export function setDisplayOutput(value: string): void {
-  display.textContent = value;
+  private buttonElements = document.querySelector('.calculator__buttons');
+
+  private displayOutput = '0';
+
+  get buttons() {
+    return this.buttonElements;
+  }
+
+  get getState() {
+    return this.state;
+  }
+  set setState(newState: IState) {
+    this.state = Object.assign(this.state, newState);
+  }
+
+  set setFirstValue(value: string) {
+    this.setState = { firstValue: value };
+  }
+
+  set setSecondValue(value: string) {
+    this.setState = { secondValue: value };
+  }
+
+  set setDisplayOutput(value: string) {
+    this.displayOutput = value;
+    display.textContent = this.displayOutput;
+  }
 }
 
 export function hasDecimal(str: string): boolean {
@@ -25,16 +49,8 @@ export function hasDecimal(str: string): boolean {
   return regex.test(str);
 }
 
-function setFirstValue(value: string): void {
-  state.firstValue = value;
-}
-
-function setSecondValue(value: string): void {
-  state.secondValue = value;
-}
-
 function isFirstValue(): boolean {
-  return state.firstValue === null;
+  return calculator.getState.firstValue === null;
 }
 
 function isStartOfFirstValue(currentOutput: string): boolean {
@@ -43,25 +59,25 @@ function isStartOfFirstValue(currentOutput: string): boolean {
 
 function isSecondValue(): boolean {
   return (
-    state.firstValue &&
-    state.previousButtonType === 'operator' &&
-    state.secondValue === null
+    calculator.getState.firstValue &&
+    calculator.getState.previousButtonType === 'operator' &&
+    calculator.getState.secondValue === null
   );
 }
 
 function handleNumberInput(currentOutput, buttonValue) {
-  if (hasDecimal(currentOutput) && state.operator === null) {
-    setDisplayOutput(currentOutput + buttonValue);
+  if (hasDecimal(currentOutput) && calculator.getState.operator === null) {
+    calculator.setDisplayOutput = currentOutput + buttonValue;
     return this;
   }
   if (isStartOfFirstValue(currentOutput)) {
-    setDisplayOutput(buttonValue);
+    calculator.setDisplayOutput = buttonValue;
     setFirstValue(buttonValue);
     return this;
   }
 
   if (isFirstValue()) {
-    setDisplayOutput(display.textContent + buttonValue);
+    calculator.setDisplayOutput = display.textContent + buttonValue;
     setFirstValue(display.textContent + buttonValue);
     return this;
   }
@@ -69,9 +85,9 @@ function handleNumberInput(currentOutput, buttonValue) {
   // Set second value
   if (isSecondValue()) {
     setSecondValue(currentOutput);
-    setDisplayOutput(buttonValue);
+    calculator.setDisplayOutput = buttonValue;
   } else {
-    setDisplayOutput(display.textContent + buttonValue);
+    calculator.setDisplayOutput = display.textContent + buttonValue;
   }
   return this;
 }
@@ -94,7 +110,6 @@ function isAction(actions: IActions, action: string): boolean {
 
 function buttonHandler(e) {
   const button: HTMLElement = e.target;
-  console.log({ state });
   if (button.matches('.calculator__button')) {
     const { action } = button.dataset;
     const buttonValue: string = button.textContent.trim();
@@ -109,16 +124,18 @@ function buttonHandler(e) {
     }
     // is action key
     if (isAction(actions, action)) {
-      state.previousButtonType = 'operator';
+      calculator.setState = { previousButtonType: 'operator' };
       if (action === actions.EQUALS) {
         return operatorHandlers.equals(
-          state.firstValue,
-          state.operator,
+          calculator.getState.firstValue,
+          calculator.getState.operator,
           currentOutput
         );
       }
       if (action === actions.PERCENTAGE) {
-        setDisplayOutput(operatorHandlers.percentage(currentOutput).toString());
+        calculator.setDisplayOutput = operatorHandlers
+          .percentage(currentOutput)
+          .toString();
         return;
       }
       setFirstValue(currentOutput);
@@ -128,4 +145,6 @@ function buttonHandler(e) {
   }
 }
 
-buttons.addEventListener('click', buttonHandler);
+export const calculator = new Calculator();
+
+calculator.buttons.addEventListener('click', buttonHandler);

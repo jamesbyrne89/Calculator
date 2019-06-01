@@ -1,4 +1,4 @@
-import { display, state } from './app';
+import { display, calculator } from './app';
 import { actions } from './constants';
 
 function decimal(currentOutput) {
@@ -6,7 +6,7 @@ function decimal(currentOutput) {
   if (currentOutput.includes('.')) {
     return;
   }
-  if (state.previousButtonType === 'operator') {
+  if (calculator.getState.previousButtonType === 'operator') {
     display.textContent = currentOutput + '.';
     return;
   }
@@ -16,26 +16,26 @@ function decimal(currentOutput) {
 function clear() {
   console.log('clear');
   display.textContent = '0';
-  state.firstValue = null;
-  state.operator = null;
-  state.secondValue = null;
-  state.previousButtonType = null;
+  calculator.setState = { firstValue: null };
+  calculator.setState = { operator: null };
+  calculator.setState = { secondValue: null };
+  calculator.setState = { previousButtonType: null };
 }
 
 function add() {
-  state.operator = actions.ADD;
+  calculator.setState = { operator: actions.ADD };
 }
 
 function subtract() {
-  state.operator = actions.SUBTRACT;
+  calculator.setState = { operator: actions.SUBTRACT };
 }
 
 function multiply() {
-  state.operator = actions.MULTIPLY;
+  calculator.setState = { operator: actions.MULTIPLY };
 }
 
 function divide() {
-  state.operator = actions.DIVIDE;
+  calculator.setState = { operator: actions.DIVIDE };
 }
 
 function percentage(input: string): number {
@@ -61,10 +61,10 @@ function calculate({ firstVal, operator, secondVal }): number {
 function equals(firstVal, operator, secondVal) {
   const result = calculate({ firstVal, operator, secondVal });
   display.textContent = result.toString();
-  state.firstValue = null;
-  state.operator = null;
-  state.secondValue = null;
-  state.previousButtonType = null;
+  calculator.setState = { firstValue: null };
+  calculator.setState = { operator: null };
+  calculator.setState = { secondValue: null };
+  calculator.setState = { previousButtonType: null };
 }
 export default {
   decimal,
