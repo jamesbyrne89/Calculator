@@ -145,23 +145,20 @@ var app_1 = require("./app");
 var constants_1 = require("./constants");
 
 function decimal(currentOutput) {
-  console.log(currentOutput);
-
   if (currentOutput.includes('.')) {
     return;
   }
 
   if (app_1.calculator.getState.previousButtonType === 'operator') {
-    app_1.display.textContent = currentOutput + '.';
+    app_1.calculator.output = currentOutput + '.';
     return;
   }
 
-  app_1.display.textContent = currentOutput + '.';
+  app_1.calculator.output = currentOutput + '.';
 }
 
 function clear() {
-  console.log('clear');
-  app_1.display.textContent = '0';
+  app_1.calculator.output = '0';
   app_1.calculator.setState = {
     firstValue: null
   };
@@ -201,7 +198,6 @@ function divide() {
 }
 
 function percentage(input) {
-  console.log(input);
   return parseFloat(input) / 100;
 }
 
@@ -234,7 +230,7 @@ function equals(firstVal, operator, secondVal) {
     operator: operator,
     secondVal: secondVal
   });
-  app_1.display.textContent = result.toString();
+  app_1.calculator.output = result.toString();
   app_1.calculator.setState = {
     firstValue: null
   };
@@ -277,13 +273,12 @@ var constants_1 = require("./constants");
 
 var operatorHandlers_1 = __importDefault(require("./operatorHandlers"));
 
-exports.display = document.querySelector('.calculator__output');
-var clearButton = document.querySelector('[data-action="clear"]');
-
 var Calculator =
 /** @class */
 function () {
   function Calculator() {
+    var _this = this;
+
     this.state = {
       previousButtonType: null,
       firstValue: null,
@@ -291,9 +286,104 @@ function () {
       operator: null
     };
     this.buttonElements = document.querySelector('.calculator__buttons');
-    this.displayOutput = '0';
+    this.display = document.querySelector('.calculator__output');
+    this.clearButton = document.querySelector('[data-action="clear"]');
+
+    this.handleNumber = function (currentOutput, buttonValue) {
+      if (hasDecimal(currentOutput) && exports.calculator.getState.operator === null) {
+        exports.calculator.output = currentOutput + buttonValue;
+        return _this;
+      }
+
+      if (isStartOfFirstValue(currentOutput)) {
+        exports.calculator.output = buttonValue;
+        exports.calculator.firstValue = buttonValue;
+        return _this;
+      }
+
+      if (isFirstValue()) {
+        exports.calculator.output = exports.calculator.currentOutput + buttonValue;
+        exports.calculator.firstValue = exports.calculator.currentOutput + buttonValue;
+        return _this;
+      } // Set second value
+
+
+      if (isSecondValue()) {
+        exports.calculator.secondValue = currentOutput;
+        exports.calculator.output = buttonValue;
+      } else {
+        exports.calculator.output = exports.calculator.currentOutput + buttonValue;
+      }
+
+      return _this;
+    };
+
+    this.toggleClearMode = function (action) {
+      if (action === constants_1.actions.CLEAR) {
+        _this.clearButton.textContent = 'AC';
+      } else {
+        _this.clearButton.textContent = 'CE';
+      }
+    };
+
+    this.handleOperator = function (action) {
+      return operatorHandlers_1.default[action](_this.currentOutput);
+    };
+
+    this.buttonHandler = function (e) {
+      var button = e.target;
+
+      if (button.matches('.calculator__button')) {
+        var action = button.dataset.action;
+        var buttonValue = button.textContent.trim(); // Toggle clear button text
+
+        _this.toggleClearMode(action);
+
+        if (!action) {
+          // Is number key
+          return _this.handleNumber(_this.currentOutput, buttonValue);
+        } // is action key
+
+
+        if (isAction(constants_1.actions, action)) {
+          _this.setState = {
+            previousButtonType: 'operator'
+          };
+
+          if (action === constants_1.actions.EQUALS) {
+            return operatorHandlers_1.default.equals(_this.getState.firstValue, _this.getState.operator, _this.currentOutput);
+          }
+
+          if (action === constants_1.actions.PERCENTAGE) {
+            _this.output = operatorHandlers_1.default.percentage(_this.currentOutput).toString();
+            return;
+          }
+
+          exports.calculator.firstValue = _this.currentOutput;
+          return _this.handleOperator(action);
+        }
+      }
+    };
+
+    this.buttons.addEventListener('click', function (e) {
+      return _this.buttonHandler(e);
+    });
   }
 
+  Object.defineProperty(Calculator.prototype, "currentOutput", {
+    get: function get() {
+      return this.display.textContent;
+    },
+    enumerable: true,
+    configurable: true
+  });
+  Object.defineProperty(Calculator.prototype, "output", {
+    set: function set(input) {
+      this.display.textContent = input;
+    },
+    enumerable: true,
+    configurable: true
+  });
   Object.defineProperty(Calculator.prototype, "buttons", {
     get: function get() {
       return this.buttonElements;
@@ -315,7 +405,7 @@ function () {
     enumerable: true,
     configurable: true
   });
-  Object.defineProperty(Calculator.prototype, "setFirstValue", {
+  Object.defineProperty(Calculator.prototype, "firstValue", {
     set: function set(value) {
       this.setState = {
         firstValue: value
@@ -324,19 +414,11 @@ function () {
     enumerable: true,
     configurable: true
   });
-  Object.defineProperty(Calculator.prototype, "setSecondValue", {
+  Object.defineProperty(Calculator.prototype, "secondValue", {
     set: function set(value) {
       this.setState = {
         secondValue: value
       };
-    },
-    enumerable: true,
-    configurable: true
-  });
-  Object.defineProperty(Calculator.prototype, "setDisplayOutput", {
-    set: function set(value) {
-      this.displayOutput = value;
-      exports.display.textContent = this.displayOutput;
     },
     enumerable: true,
     configurable: true
@@ -363,89 +445,11 @@ function isSecondValue() {
   return exports.calculator.getState.firstValue && exports.calculator.getState.previousButtonType === 'operator' && exports.calculator.getState.secondValue === null;
 }
 
-function handleNumberInput(currentOutput, buttonValue) {
-  if (hasDecimal(currentOutput) && exports.calculator.getState.operator === null) {
-    exports.calculator.setDisplayOutput = currentOutput + buttonValue;
-    return this;
-  }
-
-  if (isStartOfFirstValue(currentOutput)) {
-    exports.calculator.setDisplayOutput = buttonValue;
-    setFirstValue(buttonValue);
-    return this;
-  }
-
-  if (isFirstValue()) {
-    exports.calculator.setDisplayOutput = exports.display.textContent + buttonValue;
-    setFirstValue(exports.display.textContent + buttonValue);
-    return this;
-  } // Set second value
-
-
-  if (isSecondValue()) {
-    setSecondValue(currentOutput);
-    exports.calculator.setDisplayOutput = buttonValue;
-  } else {
-    exports.calculator.setDisplayOutput = exports.display.textContent + buttonValue;
-  }
-
-  return this;
-}
-
-function toggleClearMode(action) {
-  if (action === constants_1.actions.CLEAR) {
-    clearButton.textContent = 'AC';
-  } else {
-    clearButton.textContent = 'CE';
-  }
-}
-
-function handleOperator(action, currentOutput) {
-  return operatorHandlers_1.default[action](currentOutput);
-}
-
 function isAction(actions, action) {
   return !action || Object.keys(actions).includes(action.toUpperCase());
 }
 
-function buttonHandler(e) {
-  var button = e.target;
-
-  if (button.matches('.calculator__button')) {
-    var action = button.dataset.action;
-    var buttonValue = button.textContent.trim();
-    var currentOutput = exports.display.textContent; // Toggle clear button text
-
-    toggleClearMode(action);
-
-    if (!action) {
-      // Is number key
-      return handleNumberInput(currentOutput, buttonValue);
-    } // is action key
-
-
-    if (isAction(constants_1.actions, action)) {
-      exports.calculator.setState = {
-        previousButtonType: 'operator'
-      };
-
-      if (action === constants_1.actions.EQUALS) {
-        return operatorHandlers_1.default.equals(exports.calculator.getState.firstValue, exports.calculator.getState.operator, currentOutput);
-      }
-
-      if (action === constants_1.actions.PERCENTAGE) {
-        exports.calculator.setDisplayOutput = operatorHandlers_1.default.percentage(currentOutput).toString();
-        return;
-      }
-
-      setFirstValue(currentOutput);
-      return handleOperator(action, currentOutput);
-    }
-  }
-}
-
 exports.calculator = new Calculator();
-exports.calculator.buttons.addEventListener('click', buttonHandler);
 },{"./constants":"constants.ts","./operatorHandlers":"operatorHandlers.ts"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -474,7 +478,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53228" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61004" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

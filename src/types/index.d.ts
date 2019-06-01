@@ -39,3 +39,10 @@ export interface IState {
   operator: string;
   secondValue: string;
 }
+
+export interface IStateUpdate {
+  previousButtonType?: 'operator' | 'number';
+  firstValue?: string;
+  operator?: string;
+  secondValue?: string;
+}

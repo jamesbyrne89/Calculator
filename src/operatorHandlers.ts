@@ -1,21 +1,19 @@
-import { display, calculator } from './app';
+import { calculator } from './app';
 import { actions } from './constants';
 
 function decimal(currentOutput) {
-  console.log(currentOutput);
   if (currentOutput.includes('.')) {
     return;
   }
   if (calculator.getState.previousButtonType === 'operator') {
-    display.textContent = currentOutput + '.';
+    calculator.output = currentOutput + '.';
     return;
   }
-  display.textContent = currentOutput + '.';
+  calculator.output = currentOutput + '.';
 }
 
 function clear() {
-  console.log('clear');
-  display.textContent = '0';
+  calculator.output = '0';
   calculator.setState = { firstValue: null };
   calculator.setState = { operator: null };
   calculator.setState = { secondValue: null };
@@ -39,7 +37,6 @@ function divide() {
 }
 
 function percentage(input: string): number {
-  console.log(input);
   return parseFloat(input) / 100;
 }
 
@@ -60,7 +57,7 @@ function calculate({ firstVal, operator, secondVal }): number {
 
 function equals(firstVal, operator, secondVal) {
   const result = calculate({ firstVal, operator, secondVal });
-  display.textContent = result.toString();
+  calculator.output = result.toString();
   calculator.setState = { firstValue: null };
   calculator.setState = { operator: null };
   calculator.setState = { secondValue: null };

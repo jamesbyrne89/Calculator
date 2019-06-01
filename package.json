@@ -25,8 +25,8 @@
     "typescript": "^3.4.5"
   },
   "scripts": {
-    "dev": "parcel src/index.html --out-dir docs",
-    "build": "parcel build src/index.html --out-dir docs",
+    "dev": "parcel src/index.html --out-dir docs --public-url ./",
+    "build": "parcel build src/index.html --out-dir docs --public-url ./",
     "test": "jest --passWithNoTests"
   },
   "repository": {

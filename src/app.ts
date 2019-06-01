@@ -1,14 +1,13 @@
-import { IState, IActions } from './types';
+import { IState, IStateUpdate, IActions } from './types';
 import { actions } from './constants';
 import operatorHandlers from './operatorHandlers';
 
-export const display: HTMLElement = document.querySelector(
-  '.calculator__output'
-);
-const clearButton = document.querySelector('[data-action="clear"]');
-
 class Calculator {
-  private state = {
+  constructor() {
+    this.buttons.addEventListener('click', e => this.buttonHandler(e));
+  }
+
+  private state: IState = {
     previousButtonType: null,
     firstValue: null,
     secondValue: null,
@@ -17,7 +16,17 @@ class Calculator {
 
   private buttonElements = document.querySelector('.calculator__buttons');
 
-  private displayOutput = '0';
+  private display: HTMLElement = document.querySelector('.calculator__output');
+
+  private clearButton = document.querySelector('[data-action="clear"]');
+
+  get currentOutput() {
+    return this.display.textContent;
+  }
+
+  set output(input: string) {
+    this.display.textContent = input;
+  }
 
   get buttons() {
     return this.buttonElements;
@@ -26,22 +35,93 @@ class Calculator {
   get getState() {
     return this.state;
   }
-  set setState(newState: IState) {
+  set setState(newState: IStateUpdate) {
     this.state = Object.assign(this.state, newState);
   }
 
-  set setFirstValue(value: string) {
+  set firstValue(value: string) {
     this.setState = { firstValue: value };
   }
 
-  set setSecondValue(value: string) {
+  set secondValue(value: string) {
     this.setState = { secondValue: value };
   }
 
-  set setDisplayOutput(value: string) {
-    this.displayOutput = value;
-    display.textContent = this.displayOutput;
-  }
+  handleNumber = (currentOutput, buttonValue) => {
+    if (hasDecimal(currentOutput) && calculator.getState.operator === null) {
+      calculator.output = currentOutput + buttonValue;
+      return this;
+    }
+
+    if (isStartOfFirstValue(currentOutput)) {
+      calculator.output = buttonValue;
+      calculator.firstValue = buttonValue;
+      return this;
+    }
+
+    if (isFirstValue()) {
+      calculator.output = calculator.currentOutput + buttonValue;
+      calculator.firstValue = calculator.currentOutput + buttonValue;
+      return this;
+    }
+
+    // Set second value
+    if (isSecondValue()) {
+      calculator.secondValue = currentOutput;
+      calculator.output = buttonValue;
+    } else {
+      calculator.output = calculator.currentOutput + buttonValue;
+    }
+    return this;
+  };
+
+  toggleClearMode = (action: string): void => {
+    if (action === actions.CLEAR) {
+      this.clearButton.textContent = 'AC';
+    } else {
+      this.clearButton.textContent = 'CE';
+    }
+  };
+
+  handleOperator = (action: string) => {
+    return operatorHandlers[action](this.currentOutput);
+  };
+
+  buttonHandler = e => {
+    const button: HTMLElement = e.target;
+    if (button.matches('.calculator__button')) {
+      const { action } = button.dataset;
+      const buttonValue: string = button.textContent.trim();
+
+      // Toggle clear button text
+      this.toggleClearMode(action);
+
+      if (!action) {
+        // Is number key
+        return this.handleNumber(this.currentOutput, buttonValue);
+      }
+      // is action key
+      if (isAction(actions, action)) {
+        this.setState = { previousButtonType: 'operator' };
+        if (action === actions.EQUALS) {
+          return operatorHandlers.equals(
+            this.getState.firstValue,
+            this.getState.operator,
+            this.currentOutput
+          );
+        }
+        if (action === actions.PERCENTAGE) {
+          this.output = operatorHandlers
+            .percentage(this.currentOutput)
+            .toString();
+          return;
+        }
+        calculator.firstValue = this.currentOutput;
+
+        return this.handleOperator(action);
+      }
+    }
+  };
 }
 
 export function hasDecimal(str: string): boolean {
@@ -65,86 +145,8 @@ function isSecondValue(): boolean {
   );
 }
 
-function handleNumberInput(currentOutput, buttonValue) {
-  if (hasDecimal(currentOutput) && calculator.getState.operator === null) {
-    calculator.setDisplayOutput = currentOutput + buttonValue;
-    return this;
-  }
-  if (isStartOfFirstValue(currentOutput)) {
-    calculator.setDisplayOutput = buttonValue;
-    setFirstValue(buttonValue);
-    return this;
-  }
-
-  if (isFirstValue()) {
-    calculator.setDisplayOutput = display.textContent + buttonValue;
-    setFirstValue(display.textContent + buttonValue);
-    return this;
-  }
-
-  // Set second value
-  if (isSecondValue()) {
-    setSecondValue(currentOutput);
-    calculator.setDisplayOutput = buttonValue;
-  } else {
-    calculator.setDisplayOutput = display.textContent + buttonValue;
-  }
-  return this;
-}
-
-function toggleClearMode(action: string): void {
-  if (action === actions.CLEAR) {
-    clearButton.textContent = 'AC';
-  } else {
-    clearButton.textContent = 'CE';
-  }
-}
-
-function handleOperator(action, currentOutput) {
-  return operatorHandlers[action](currentOutput);
-}
-
 function isAction(actions: IActions, action: string): boolean {
   return !action || Object.keys(actions).includes(action.toUpperCase());
 }
 
-function buttonHandler(e) {
-  const button: HTMLElement = e.target;
-  if (button.matches('.calculator__button')) {
-    const { action } = button.dataset;
-    const buttonValue: string = button.textContent.trim();
-    const currentOutput = display.textContent;
-
-    // Toggle clear button text
-    toggleClearMode(action);
-
-    if (!action) {
-      // Is number key
-      return handleNumberInput(currentOutput, buttonValue);
-    }
-    // is action key
-    if (isAction(actions, action)) {
-      calculator.setState = { previousButtonType: 'operator' };
-      if (action === actions.EQUALS) {
-        return operatorHandlers.equals(
-          calculator.getState.firstValue,
-          calculator.getState.operator,
-          currentOutput
-        );
-      }
-      if (action === actions.PERCENTAGE) {
-        calculator.setDisplayOutput = operatorHandlers
-          .percentage(currentOutput)
-          .toString();
-        return;
-      }
-      setFirstValue(currentOutput);
-
-      return handleOperator(action, currentOutput);
-    }
-  }
-}
-
 export const calculator = new Calculator();
-
-calculator.buttons.addEventListener('click', buttonHandler);
