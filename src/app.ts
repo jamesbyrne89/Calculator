@@ -1,10 +1,10 @@
-import { IState, IStateUpdate, IActions } from './types';
+import { ICalculatorState, ICalculatorStateUpdate } from './types';
 import { actions } from './constants';
 import operatorHandlers from './operatorHandlers';
 
 class ButtonPress {
-  constructor(target) {
-    const { action } = target.dataset;
+  constructor(target: HTMLButtonElement) {
+    const { action }: DOMStringMap = target.dataset;
     this.target = target;
     this.action = action;
     this.value = target.textContent.trim();
@@ -22,7 +22,7 @@ class Calculator {
     this.buttons.addEventListener('click', e => this.buttonHandler(e));
   }
 
-  private state: IState = {
+  private state: ICalculatorState = {
     previousButtonType: null,
     firstValue: null,
     secondValue: null,
@@ -50,7 +50,7 @@ class Calculator {
   get getState() {
     return this.state;
   }
-  set setState(newState: IStateUpdate) {
+  set setState(newState: ICalculatorStateUpdate) {
     this.state = Object.assign(this.state, newState);
   }
 

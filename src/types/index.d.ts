@@ -33,14 +33,14 @@ export interface IActions {
   EQUALS: 'equals';
   CLEAR: 'clear';
 }
-export interface IState {
+export interface ICalculatorState {
   previousButtonType: 'operator' | 'number';
   firstValue: string;
   operator: string;
   secondValue: string;
 }
 
-export interface IStateUpdate {
+export interface ICalculatorStateUpdate {
   previousButtonType?: 'operator' | 'number';
   firstValue?: string;
   operator?: string;
