@@ -3,6 +3,10 @@ import { actions } from './constants';
 import operatorHandlers from './operatorHandlers';
 
 class ButtonPress {
+  target: HTMLButtonElement;
+  action: string;
+  value: string;
+
   constructor(target: HTMLButtonElement) {
     const { action }: DOMStringMap = target.dataset;
     this.target = target;
