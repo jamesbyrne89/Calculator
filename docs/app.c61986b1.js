@@ -273,6 +273,25 @@ var constants_1 = require("./constants");
 
 var operatorHandlers_1 = __importDefault(require("./operatorHandlers"));
 
+var ButtonPress =
+/** @class */
+function () {
+  function ButtonPress(target) {
+    var _this = this;
+
+    this.isAction = function () {
+      return !_this.action || Object.keys(constants_1.actions).includes(_this.action.toUpperCase());
+    };
+
+    var action = target.dataset.action;
+    this.target = target;
+    this.action = action;
+    this.value = target.textContent.trim();
+  }
+
+  return ButtonPress;
+}();
+
 var Calculator =
 /** @class */
 function () {
@@ -331,36 +350,33 @@ function () {
     };
 
     this.buttonHandler = function (e) {
-      var button = e.target;
+      if (e.target.matches('.calculator__button')) {
+        var button = new ButtonPress(e.target); // Toggle clear button text
 
-      if (button.matches('.calculator__button')) {
-        var action = button.dataset.action;
-        var buttonValue = button.textContent.trim(); // Toggle clear button text
+        _this.toggleClearMode(button.action);
 
-        _this.toggleClearMode(action);
-
-        if (!action) {
+        if (!button.action) {
           // Is number key
-          return _this.handleNumber(_this.currentOutput, buttonValue);
+          return _this.handleNumber(_this.currentOutput, button.value);
         } // is action key
 
 
-        if (isAction(constants_1.actions, action)) {
+        if (button.isAction()) {
           _this.setState = {
             previousButtonType: 'operator'
           };
 
-          if (action === constants_1.actions.EQUALS) {
+          if (button.action === constants_1.actions.EQUALS) {
             return operatorHandlers_1.default.equals(_this.getState.firstValue, _this.getState.operator, _this.currentOutput);
           }
 
-          if (action === constants_1.actions.PERCENTAGE) {
+          if (button.action === constants_1.actions.PERCENTAGE) {
             _this.output = operatorHandlers_1.default.percentage(_this.currentOutput).toString();
             return;
           }
 
-          exports.calculator.firstValue = _this.currentOutput;
-          return _this.handleOperator(action);
+          _this.firstValue = _this.currentOutput;
+          return _this.handleOperator(button.action);
         }
       }
     };
@@ -437,18 +453,19 @@ function isFirstValue() {
   return exports.calculator.getState.firstValue === null;
 }
 
+exports.isFirstValue = isFirstValue;
+
 function isStartOfFirstValue(currentOutput) {
   return isFirstValue() || currentOutput === '0';
 }
+
+exports.isStartOfFirstValue = isStartOfFirstValue;
 
 function isSecondValue() {
   return exports.calculator.getState.firstValue && exports.calculator.getState.previousButtonType === 'operator' && exports.calculator.getState.secondValue === null;
 }
 
-function isAction(actions, action) {
-  return !action || Object.keys(actions).includes(action.toUpperCase());
-}
-
+exports.isSecondValue = isSecondValue;
 exports.calculator = new Calculator();
 },{"./constants":"constants.ts","./operatorHandlers":"operatorHandlers.ts"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
@@ -478,7 +495,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61004" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58259" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -2,6 +2,21 @@ import { IState, IStateUpdate, IActions } from './types';
 import { actions } from './constants';
 import operatorHandlers from './operatorHandlers';
 
+class ButtonPress {
+  constructor(target) {
+    const { action } = target.dataset;
+    this.target = target;
+    this.action = action;
+    this.value = target.textContent.trim();
+  }
+
+  isAction = (): boolean => {
+    return (
+      !this.action || Object.keys(actions).includes(this.action.toUpperCase())
+    );
+  };
+}
+
 class Calculator {
   constructor() {
     this.buttons.addEventListener('click', e => this.buttonHandler(e));
@@ -88,37 +103,35 @@ class Calculator {
   };
 
   buttonHandler = e => {
-    const button: HTMLElement = e.target;
-    if (button.matches('.calculator__button')) {
-      const { action } = button.dataset;
-      const buttonValue: string = button.textContent.trim();
+    if (e.target.matches('.calculator__button')) {
+      const button = new ButtonPress(e.target);
 
       // Toggle clear button text
-      this.toggleClearMode(action);
+      this.toggleClearMode(button.action);
 
-      if (!action) {
+      if (!button.action) {
         // Is number key
-        return this.handleNumber(this.currentOutput, buttonValue);
+        return this.handleNumber(this.currentOutput, button.value);
       }
       // is action key
-      if (isAction(actions, action)) {
+      if (button.isAction()) {
         this.setState = { previousButtonType: 'operator' };
-        if (action === actions.EQUALS) {
+        if (button.action === actions.EQUALS) {
           return operatorHandlers.equals(
             this.getState.firstValue,
             this.getState.operator,
             this.currentOutput
           );
         }
-        if (action === actions.PERCENTAGE) {
+        if (button.action === actions.PERCENTAGE) {
           this.output = operatorHandlers
             .percentage(this.currentOutput)
             .toString();
           return;
         }
-        calculator.firstValue = this.currentOutput;
+        this.firstValue = this.currentOutput;
 
-        return this.handleOperator(action);
+        return this.handleOperator(button.action);
       }
     }
   };
@@ -129,24 +142,20 @@ export function hasDecimal(str: string): boolean {
   return regex.test(str);
 }
 
-function isFirstValue(): boolean {
+export function isFirstValue(): boolean {
   return calculator.getState.firstValue === null;
 }
 
-function isStartOfFirstValue(currentOutput: string): boolean {
+export function isStartOfFirstValue(currentOutput: string): boolean {
   return isFirstValue() || currentOutput === '0';
 }
 
-function isSecondValue(): boolean {
+export function isSecondValue(): boolean {
   return (
     calculator.getState.firstValue &&
     calculator.getState.previousButtonType === 'operator' &&
     calculator.getState.secondValue === null
   );
-}
-
-function isAction(actions: IActions, action: string): boolean {
-  return !action || Object.keys(actions).includes(action.toUpperCase());
 }
 
 export const calculator = new Calculator();
