@@ -17,10 +17,10 @@
     "webpack-stats-plugin": "^0.3.0"
   },
   "devDependencies": {
-    "@types/jest": "^24.0.13",
+    "@types/jest": "^24.0.16",
     "jest": "^24.8.0",
     "jest-cli": "^24.8.0",
-    "sass": "^1.20.1",
+    "sass": "^1.22.9",
     "ts-jest": "^24.0.2",
     "typescript": "^3.5.3"
   },
